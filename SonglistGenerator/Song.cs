@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -9,7 +10,7 @@ namespace SonglistGenerator
     /// </summary>
     public class Song : IDiskLocationRepresentation
     {
-        string[] songFileContent;
+        List<string> songFileContent;
 
         public Song(string filePath)
         {
@@ -18,7 +19,7 @@ namespace SonglistGenerator
 
         public void Initialize()
         {
-            this.songFileContent = File.ReadAllLines(this.FilePath);
+            this.songFileContent = File.ReadAllLines(this.FilePath).ToList();
 
             var titleLine = this.songFileContent.Single(x => x.StartsWith("\\tytul"));
 
@@ -36,6 +37,10 @@ namespace SonglistGenerator
             this.Title = splitTitleLine[0].Value;
             this.Author = splitTitleLine[1].Value;
             this.Artist = splitTitleLine[2].Value;
+
+            var textStart = this.songFileContent.FindIndex(x => x.StartsWith("\\begin{text")) + 1;
+            var textEnd = this.songFileContent.FindIndex(x => x.StartsWith("\\end{text")) - 1;
+
         }
 
         public string FilePath { get; private set; }

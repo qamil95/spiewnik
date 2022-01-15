@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -39,8 +40,13 @@ namespace SonglistGenerator
             this.Artist = splitTitleLine[2].Value;
 
             var textStart = this.songFileContent.FindIndex(x => x.StartsWith("\\begin{text")) + 1;
-            var textEnd = this.songFileContent.FindIndex(x => x.StartsWith("\\end{text")) - 1;
+            var textEnd = this.songFileContent.FindIndex(x => x.StartsWith("\\end{text"));
 
+            var chordsStart = this.songFileContent.FindIndex(x => x.StartsWith("\\begin{chord")) + 1;
+            var chordsEnd = this.songFileContent.FindIndex(x => x.StartsWith("\\end{chord"));
+
+            this.Text = this.songFileContent.Take(new Range(new Index(textStart), new Index(textEnd))).ToList();
+            this.Chords = this.songFileContent.Take(new Range(new Index(chordsStart), new Index(chordsEnd))).ToList();
         }
 
         public string FilePath { get; private set; }
@@ -76,9 +82,9 @@ namespace SonglistGenerator
         /// </summary>
         //string FirstLineOfChorus { get; }
 
-        //List<string> Text { get; }
+        public List<string> Text { get; private set; }
 
-        //List<string> Chords { get; }
+        public List<string> Chords { get; private set; }
 
         public override string ToString()
         {

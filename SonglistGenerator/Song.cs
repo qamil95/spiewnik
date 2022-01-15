@@ -22,7 +22,7 @@ namespace SonglistGenerator
 
             var titleLine = this.songFileContent.Single(x => x.StartsWith("\\tytul"));
 
-            if (titleLine.Count(x => (x == '{')) != 3)
+            if (!ContainsThreeOpeningCurlyBraces(titleLine))
             {
                 // Title section is split into separate lines
                 var mergedContent = string.Join("", this.songFileContent);
@@ -78,6 +78,11 @@ namespace SonglistGenerator
         public override string ToString()
         {
             return $"{this.Artist} - {this.Title}";
+        }
+
+        private bool ContainsThreeOpeningCurlyBraces(string line)
+        {
+            return line.Count(x => (x == '{')) == 3;
         }
     }
 }

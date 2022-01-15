@@ -1,0 +1,73 @@
+%%
+%% Author: bartosz.rydz
+%% %24.05.2018
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{chwyty_a5}
+
+% Packages
+\usepackage[left=2cm, right=1.5cm, top=1cm, bottom=2cm]{geometry}               %margins
+\usepackage[T1]{fontenc}            %font
+\usepackage[utf8]{inputenc}         %font
+\usepackage{polski}                 %font
+\usepackage[polish]{babel}          %font
+\usepackage{comment}                %block comment
+\usepackage{parskip}                %spaces between paragraphs
+\usepackage{multicol}               %twocolumn ToC
+\usepackage{titlesec, color}        %redefine chapter
+\usepackage{lmodern}                %styleset titles
+\usepackage{fancyhdr}               %redefine chapter
+\usepackage{verse}                  %\vin
+\usepackage[hidelinks]{hyperref}    %hyperlinks in ToC
+%\usepackage{pgffor}                 %WTF?
+\usepackage{tagging} %<-----Tags! Documentation:
+%http://piotrkosoft.net/pub/mirrors/CTAN/macros/latex/contrib/tagging/tagging.pdf
+%\usepackage{makeidx}
+%\usepackage[defaultlines=4,all]{nowidow}
+\usepackage[chorded]{songs}         %[lyric/chorded,/,slides/rawtext]
+
+\usepackage{environ}                %\body as a macro for /ifchorded
+\usepackage[defaultlines=4,all]{nowidow} %no pagebreak after authors
+%\usepackage{amsmath}               %by unknown reasons, besides math environment, also introduces breaks in minipage
+
+%custom commands
+\usepackage{wlasnef}
+
+
+%styles
+
+\newcommand{\hsp}{\hspace{20pt}}
+\titleformat{\chapter}[hang]{\huge\bfseries}{\thechapter\hsp{|}\hsp}{0pt}{\huge\bfseries}
+\titlespacing{\chapter}{0cm}{0cm}{0cm}
+\titleformat{\section}{\Large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titlespacing{\section}{0cm}{0.7cm}{0.2cm}[0pt]
+\parindent=0pt
+\parskip 9pt
+%
+%\setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{0pt}
+%\setlength{\abovedisplayskip}{0pt} \setlength{\abovedisplayshortskip}{0pt}
+%
+\hbadness=99999     %supress underfull hbox warning
+\vbadness=99999     %supress underfull vbox warning
+
+%head and foot
+\pagestyle{fancy}
+%\headheight{14pt}
+\renewcommand{\chaptermark}[1]{%
+\markboth{#1}{}
+}
+%
+
+ \fancyhead{}
+  \renewcommand{\headrulewidth}{0pt}
+  \fancyfoot[C]{}
+  \fancyfoot[LE,RO]{\thepage}
+
+\fancypagestyle{plain}{
+  \fancyhead{}
+  \renewcommand{\headrulewidth}{0pt}
+  \fancyfoot[C]{}
+  \fancyfoot[LE,RO]{\thepage}
+}
+

@@ -18,7 +18,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 6.0.x
           
     - name: Install tests dependencies
       run: dotnet restore $GITHUB_WORKSPACE/SonglistGeneratorTests/SonglistGeneratorTests.csproj
@@ -36,13 +36,13 @@ jobs:
       run: dotnet build $GITHUB_WORKSPACE/SonglistGenerator/SonglistGenerator.csproj --configuration Release --no-restore
       
     - name: Run SonglistGenerator
-      run: dotnet $GITHUB_WORKSPACE/SonglistGenerator/bin/Release/net5.0/SonglistGenerator.dll $GITHUB_WORKSPACE/main "$GITHUB_WORKSPACE/Songbook v2.0 r${{github.run_number}}" 1
+      run: dotnet $GITHUB_WORKSPACE/SonglistGenerator/bin/Release/net6.0/SonglistGenerator.dll $GITHUB_WORKSPACE/main "$GITHUB_WORKSPACE/Songbook v2.0 r${{github.run_number}}" 1
     
     - name: Upload SonglistGenerator.dll
       uses: actions/upload-artifact@v2
       with:
         name: SonglistGenerator DLL r${{github.run_number}}
-        path: SonglistGenerator/bin/Release/net5.0/SonglistGenerator.dll
+        path: SonglistGenerator/bin/Release/net6.0/SonglistGenerator.dll
         
     - name: Upload zip file with songbook source, containing new main and master files
       uses: actions/upload-artifact@v2

@@ -4,7 +4,7 @@ namespace SongChooser
 {
     class DisplaySong
     {
-        private Song song;
+        public readonly Song song;
 
         public DisplaySong(Song song, string chapter)
         {

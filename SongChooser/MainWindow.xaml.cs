@@ -73,5 +73,11 @@ namespace SongChooser
 
             this.generator.Generate();
         }
+
+        private void dataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var songView = new SongView(dataGrid);
+            songView.Show();
+        }
     }
 }

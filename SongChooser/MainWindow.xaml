@@ -30,6 +30,6 @@
         </DockPanel>
         <Button Grid.Row="2" Grid.Column="2" Content="Generate songbook" Click="GenerateSongbook" />
 
-        <DataGrid Grid.Row="3" Grid.ColumnSpan="3" Name="dataGrid" />
+        <DataGrid Grid.Row="3" Grid.ColumnSpan="3" Name="dataGrid" MouseDoubleClick="dataGrid_MouseDoubleClick" />
     </Grid>
 </Window>

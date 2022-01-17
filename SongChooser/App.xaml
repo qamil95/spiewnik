@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:SongChooser"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:ListOfStringToJoinedStringConverter x:Key="listOfStringToJoinedStringConverter" />
     </Application.Resources>
 </Application>

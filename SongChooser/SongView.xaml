@@ -34,7 +34,7 @@
             <Label Grid.Row="1" Grid.Column="2" Content="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Artist}" />
         </Grid>
 
-        <TextBox Grid.Row="1" Grid.Column="0" Name="text" />
-        <TextBox Grid.Row="1" Grid.Column="1" Name="chords" />
+        <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Text, Mode=OneWay, Converter={StaticResource listOfStringToJoinedStringConverter}}" />
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Chords, Mode=OneWay, Converter={StaticResource listOfStringToJoinedStringConverter}}" />
     </Grid>
 </Window>

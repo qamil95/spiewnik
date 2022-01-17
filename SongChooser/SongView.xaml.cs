@@ -1,5 +1,7 @@
 ﻿using SonglistGenerator;
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,9 +10,17 @@ namespace SongChooser
     /// <summary>
     /// Interaction logic for SongView.xaml
     /// </summary>
-    public partial class SongView : Window
+    public partial class SongView : Window, INotifyPropertyChanged
     {
         private readonly DataGrid dataGrid;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public Song SelectedSong => (this.dataGrid.SelectedItem as DisplaySong).song;
 
         public SongView(DataGrid dataGrid)
@@ -18,18 +28,18 @@ namespace SongChooser
             this.dataGrid = dataGrid;
 
             InitializeComponent();
-            this.text.Text = string.Join(Environment.NewLine, SelectedSong.Text);
-            this.chords.Text = string.Join(Environment.NewLine, SelectedSong.Chords);
         }
 
         private void LeftButtonClick(object sender, RoutedEventArgs e)
         {
             dataGrid.SelectedIndex--;
+            NotifyPropertyChanged(nameof(SelectedSong));
         }
 
         private void RightButtonClick(object sender, RoutedEventArgs e)
         {
             dataGrid.SelectedIndex++;
+            NotifyPropertyChanged(nameof(SelectedSong));
         }
     }
 }

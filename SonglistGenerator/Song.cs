@@ -46,7 +46,15 @@ namespace SonglistGenerator
             var chordsEnd = this.songFileContent.FindIndex(x => x.StartsWith("\\end{chord"));
 
             this.Text = this.songFileContent.Take(new Range(new Index(textStart), new Index(textEnd))).ToList();
-            this.Chords = this.songFileContent.Take(new Range(new Index(chordsStart), new Index(chordsEnd))).ToList();
+
+            if (chordsStart == 0 && chordsEnd == -1)
+            {
+                this.Chords = new List<string> { "BRAK CHWYTÓW" };
+            }
+            else
+            {
+                this.Chords = this.songFileContent.Take(new Range(new Index(chordsStart), new Index(chordsEnd))).ToList();
+            }
         }
 
         public string FilePath { get; private set; }

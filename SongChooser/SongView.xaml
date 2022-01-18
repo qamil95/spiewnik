@@ -25,13 +25,17 @@
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
             <Button Grid.Row="0" Grid.Column="0" Content="&lt;&lt;" Click="LeftButtonClick"/>
+            <Button Grid.Row="0" Grid.Column="1" Content="Random" Click="RandomButtonClick" />
             <Button Grid.Row="0" Grid.Column="2" Content=">>" Click="RightButtonClick"/>
-            
-            <Label Grid.Row="1" Grid.Column="0" Content="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Title}"/>
-            <Label Grid.Row="1" Grid.Column="1" Content="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Author}" />
-            <Label Grid.Row="1" Grid.Column="2" Content="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Artist}" />
+
+            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding ElementName=TemporaryBinding, Path=SelectedSong.FilePath}"/>
+
+            <Label Grid.Row="2" Grid.Column="0" Content="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Title}"/>
+            <Label Grid.Row="2" Grid.Column="1" Content="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Author}" />
+            <Label Grid.Row="2" Grid.Column="2" Content="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Artist}" />
         </Grid>
 
         <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Text, Mode=OneWay, Converter={StaticResource listOfStringToJoinedStringConverter}}" />

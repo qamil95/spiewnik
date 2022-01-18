@@ -16,7 +16,7 @@ namespace SongChooser
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -39,6 +39,12 @@ namespace SongChooser
         private void RightButtonClick(object sender, RoutedEventArgs e)
         {
             dataGrid.SelectedIndex++;
+            NotifyPropertyChanged(nameof(SelectedSong));
+        }
+
+        private void RandomButtonClick(object sender, RoutedEventArgs e)
+        {
+            dataGrid.SelectedIndex = new Random().Next(dataGrid.Items.Count);
             NotifyPropertyChanged(nameof(SelectedSong));
         }
     }

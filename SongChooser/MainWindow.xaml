@@ -24,8 +24,8 @@
         <Button Grid.Row="1" Grid.Column="2" Content="Save settings" Click="SaveSettings" />
 
         <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
-            <Label Content="{Binding ElementName=minimumAllowedChapterSize, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right"/>
-            <Label Content="Minimum allowed chapter size:" />
+            <TextBlock Padding="5" Text="{Binding ElementName=minimumAllowedChapterSize, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right"/>
+            <TextBlock Padding="5" Text="Minimum allowed chapter size:" />
             <Slider Grid.Row="2" Grid.Column="1" Value="1" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" Minimum="1" Maximum="9" Name="minimumAllowedChapterSize"/>
         </DockPanel>
         <Button Grid.Row="2" Grid.Column="2" Content="Generate songbook" Click="GenerateSongbook" />

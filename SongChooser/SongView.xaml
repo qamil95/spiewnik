@@ -31,7 +31,11 @@
             <Button Grid.Row="0" Grid.Column="1" Content="Random" Click="RandomButtonClick" />
             <Button Grid.Row="0" Grid.Column="2" Content=">>" Click="RightButtonClick"/>
 
-            <TextBlock Padding="5" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding ElementName=TemporaryBinding, Path=SelectedSong.FilePath}"/>
+            <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+                <TextBlock Padding="5"  Text="{Binding ElementName=TemporaryBinding, Path=SelectedSong.FilePath}"/>
+                <Button Content="Open file" HorizontalAlignment="Right" Click="OpenFileButtonClick"/>
+            </DockPanel>
+
 
             <TextBlock Padding="5" Grid.Row="2" Grid.Column="0" Text="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Title}"/>
             <TextBlock Padding="5" Grid.Row="2" Grid.Column="1" Text="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Author}" />

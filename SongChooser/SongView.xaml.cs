@@ -1,6 +1,7 @@
 ﻿using SonglistGenerator;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -46,6 +47,15 @@ namespace SongChooser
         {
             dataGrid.SelectedIndex = new Random().Next(dataGrid.Items.Count);
             NotifyPropertyChanged(nameof(SelectedSong));
+        }
+
+        private void OpenFileButtonClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = SelectedSong.FilePath,
+                UseShellExecute = true,
+            });
         }
     }
 }

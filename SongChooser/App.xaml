@@ -1,9 +1,9 @@
 ﻿<Application x:Class="SongChooser.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SongChooser"
+             xmlns:converters="clr-namespace:SongChooser.Converters"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <local:ListOfStringToJoinedStringConverter x:Key="listOfStringToJoinedStringConverter" />
+        <converters:ListOfStringToJoinedStringConverter x:Key="listOfStringToJoinedStringConverter" />
     </Application.Resources>
 </Application>

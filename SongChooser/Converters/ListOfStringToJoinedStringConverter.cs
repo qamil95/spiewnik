@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace SongChooser
+namespace SongChooser.Converters
 {
     public class ListOfStringToJoinedStringConverter : IValueConverter
     {

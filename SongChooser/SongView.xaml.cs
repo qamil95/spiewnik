@@ -22,7 +22,7 @@ namespace SongChooser
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Song SelectedSong => (this.dataGrid.SelectedItem as DisplaySong).song;
+        public DisplaySong SelectedSong => (this.dataGrid.SelectedItem as DisplaySong);
 
         public SongView(DataGrid dataGrid)
         {
@@ -53,7 +53,7 @@ namespace SongChooser
         {
             Process.Start(new ProcessStartInfo()
             {
-                FileName = SelectedSong.FilePath,
+                FileName = SelectedSong.Path,
                 UseShellExecute = true,
             });
         }

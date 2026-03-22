@@ -32,7 +32,7 @@
             <Button Grid.Row="0" Grid.Column="2" Content=">>" Click="RightButtonClick"/>
 
             <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
-                <TextBlock Padding="5"  Text="{Binding ElementName=TemporaryBinding, Path=SelectedSong.FilePath}"/>
+                <TextBlock Padding="5"  Text="{Binding ElementName=TemporaryBinding, Path=SelectedSong.Path}"/>
                 <Button Content="Open file" HorizontalAlignment="Right" Click="OpenFileButtonClick"/>
             </DockPanel>
 

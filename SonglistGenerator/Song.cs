@@ -49,11 +49,19 @@ namespace SonglistGenerator
 
             if (chordsStart == 0 && chordsEnd == -1)
             {
-                this.Chords = new List<string> { "BRAK CHWYTÓW" };
+                this.Chords = new List<string> { "BRAK CHWYTÓW" }; //TODO: assign null instead
             }
             else
             {
-                this.Chords = this.songFileContent.Take(new Range(new Index(chordsStart), new Index(chordsEnd))).ToList();
+                var chords = this.songFileContent.Take(new Range(new Index(chordsStart), new Index(chordsEnd))).ToList();
+                if (chords.All(string.IsNullOrWhiteSpace))
+                {
+                    this.Chords = new List<string> { "BRAK CHWYTÓW" }; //TODO: assign null instead
+                }
+                else
+                {
+                    this.Chords = chords;
+                }
             }
         }
 

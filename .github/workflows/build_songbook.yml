@@ -39,7 +39,7 @@ jobs:
       run: dotnet $GITHUB_WORKSPACE/SonglistGenerator/bin/Release/net6.0/SonglistGenerator.dll $GITHUB_WORKSPACE/main "$GITHUB_WORKSPACE/Songbook v2.0 r${{github.run_number}}" 1
     
     - name: Upload SonglistGenerator.dll
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v6
       with:
         name: SonglistGenerator DLL r${{github.run_number}}
         path: SonglistGenerator/bin/Release/net6.0/SonglistGenerator.dll

@@ -18,7 +18,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 10.0.x
           
     - name: Install tests dependencies
       run: dotnet restore $GITHUB_WORKSPACE/SonglistGeneratorTests/SonglistGeneratorTests.csproj
@@ -45,7 +45,7 @@ jobs:
         path: SonglistGenerator/bin/Release/net6.0/SonglistGenerator.dll
         
     - name: Upload zip file with songbook source, containing new main and master files
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v6
       with:
         name: Songbook v2.0 r${{github.run_number}}_source
         path: Songbook v2.0 r${{github.run_number}}
@@ -63,25 +63,25 @@ jobs:
         working_directory: "Songbook v2.0 r${{github.run_number}}"
         
     - name: Upload generated PDF A4
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v6
       with:
         name: Songbook v2.0 r${{github.run_number}}_pdf
         path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty.pdf
         
     - name: Upload generated PDF A4 (output log)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v6
       with:
         name: Songbook v2.0 r${{github.run_number}}_pdf
         path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty.log
         
     - name: Upload generated PDF A5
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v6
       with:
         name: Songbook v2.0 r${{github.run_number}}_pdf
         path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty_a5.pdf
         
     - name: Upload generated PDF A5 (output log)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v6
       with:
         name: Songbook v2.0 r${{github.run_number}}_pdf
         path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty_a5.log

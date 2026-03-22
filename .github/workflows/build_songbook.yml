@@ -71,17 +71,17 @@ jobs:
     - name: Upload generated PDF A4 (output log)
       uses: actions/upload-artifact@v6
       with:
-        name: Songbook v2.0 r${{github.run_number}}_pdf
+        name: Songbook v2.0 r${{github.run_number}}_pdf_log
         path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty.log
         
     - name: Upload generated PDF A5
       uses: actions/upload-artifact@v6
       with:
-        name: Songbook v2.0 r${{github.run_number}}_pdf
+        name: Songbook v2.0 r${{github.run_number}}_pdf_a5
         path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty_a5.pdf
         
     - name: Upload generated PDF A5 (output log)
       uses: actions/upload-artifact@v6
       with:
-        name: Songbook v2.0 r${{github.run_number}}_pdf
+        name: Songbook v2.0 r${{github.run_number}}_pdf_a5_log
         path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty_a5.log

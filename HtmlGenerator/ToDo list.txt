@@ -24,12 +24,6 @@ Przede wszystkim dodać je (oraz te co już są na branchu obok scommitowane z p
     na_bani/Poezja.tex
 
 Ręcznie wynotowane:
-Koczewski - jeszcze nie czas, skrócony refren w HTMLu się rozwala i przez to pdf też tak sobie wygląda
-Koczewski - Jesienne Wino jest nieprawidłowo sklejone w jedno
-Szemkel siódmy anioł - też trzeba poprawić, wstęp się rozwala
-Kolorowy wiatr jak wyżej też się psuje
-Molly Maquires - mamy \hfill\break na początku refrenu jako Hej bez chwytów, może tam jednak tylda lepiej by była?
-Pożegnalny wieczór jest cały rozwalony
 Pogodne popołudnie kapitana białej floty - do ogarnięcia jak to zrobić dobrze z alternatywną wersją chwytów
 Do świtu - nawet jak się poprawi wyświetlane (pierwszy punkt z poprawek w pwsh), to i tak dobrze jest "dokleić" przygrywkę do refrenu.
 Kołysanka dla Joanny I - coś tam się nie zgadza, wygląda bardzo dziwnie, to generalnej poprawki.
@@ -39,6 +33,8 @@ Kubański szlak
 Zaczarowana gitara
 ---
 Do poprawki w obecnej wersji powrshellowej:
+
+Do świtu: wersja chord only pair nie działa dobrze jeśli są same chwyty bez żadnego tekstu. Niech będzie poprawione.
 
 BUG: przy oknie tak wąskim że nie widać spisu treści, znika scrollbar.
 

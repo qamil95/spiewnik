@@ -20,6 +20,7 @@ const THRESHOLD_PX = 30; // max 30 pikseli roznic (antyaliasing), powyzej = fail
 const SONGS = [
   { title: 'Chyba już czas',                         artist: 'Adam Drąg' },
   { title: 'Ech muzyka',                             artist: 'Adam Drąg' },
+  { title: 'Jesienne wino',                          artist: 'Andrzej Koczewski' },
   { title: 'Jeszcze nie czas',                       artist: 'Andrzej Koczewski' },
   { title: 'W lesie listopadowym',                   artist: 'Andrzej Koczewski' },
   { title: 'Bieszczady',                             artist: 'Andrzej Starzec' },
@@ -28,8 +29,10 @@ const SONGS = [
   { title: 'Ballada o wilku',                        artist: 'Bułas' },
   { title: 'Buty idą dwa',                           artist: 'Było Nas Trzech' },
   { title: 'Chrystus Bieszczadzki',                  artist: 'Cisza jak ta' },
+  { title: 'Pozegnalny wieczor',                     artist: 'Cisza jak ta' },
   { title: 'Szemkel',                                artist: 'Cisza jak ta' },
   { title: 'Toaleta, wucet, kibel, haziel, sracz',   artist: 'Dawisiek21' },
+  { title: 'Kolorowy wiatr',                         artist: 'Disney' },
   { title: 'Niewidzialna plastelina',                artist: 'Dnieje' },
   { title: 'Łemata',                                 artist: 'Dom o Zielonych Progach' },
   { title: 'Bar w Beskidzie',                        artist: 'EKT Gdynia' },

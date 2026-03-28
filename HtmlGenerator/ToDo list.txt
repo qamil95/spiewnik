@@ -4,6 +4,8 @@ A może lepiej jednak zrobić to na zasadzie programu C# który już mamy tutaj 
 ---
 
 Piosenki z błędami: 
+
+Przede wszystkim dodać je (oraz te co już są na branchu obok scommitowane z poprawkami) do testów automatycznych.
  
 ══ [WARN] Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu) (6x)
     Ludowe/pedro_i_kury.tex

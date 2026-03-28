@@ -611,6 +611,7 @@ TSWLatexianTemp*
 # PDF output
 *.pdf
 
-# Generated HTMLs
+# Generated HTMLs and test logs
 spiewnik.html
 verify_spiewnik.html
+HtmlGenerator/snapshots_diff/

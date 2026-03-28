@@ -2,6 +2,8 @@ A może lepiej jednak zrobić to na zasadzie programu C# który już mamy tutaj 
 
 ---
 
+BUG: przy oknie tak wąskim że nie widać spisu treści, znika scrollbar.
+
 \textit{Alternatywnie:} w środku sekcji chwytów oznacza alternatywną wersję chwytów, nie radzisz sobie z tym wcale.
 
 Nowa funkcjonalność do dodania i pokrycia testami: Dodawane nowych piosenek - dialog w ktorym wpisujemy wszystkie potrzebne dane, tekst piosenki oraz chwyty, i potem po kliknięciu generuje sie plik tex - i zapisuje się tak samo jak eksport ustawień, też pod prawidłową nazwą. Ten plik tex jest przeznaczony i gotowy do wrzucenia do repozytorium ręcznie, i potem wygenerowania samemu nowego htmla i pdfa. Przycisk ma być w górnym menu, po lewej stronie od usunięcia piosenki oraz od listy usuniętych piosenek, po prawej od ustawień.

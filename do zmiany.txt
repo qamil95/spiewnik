@@ -1,6 +1,54 @@
+Generalna rzecz:
 A może lepiej jednak zrobić to na zasadzie programu C# który już mamy tutaj otwarty i dostępny? SonglistGenerator mógłby mieć alternatywny przełącznik, który zamiast dostosować pliki .tex do bycia prawidłowo skompilowanymi przez latexa, to by utworzył ten HTML? Cała rezta funkcjonalności musi w nim być zachowana, więc to trochę roboty z przepisaniem, ale wydaje mi się że to bardziej spójne rozwiązanie. Szczególnie że jakaś forma parsowania plików już jest tam zawarta, więc powinno być nieco łatwiej się dołączyć w istniejące rozwiązanie. Przepiszesz całego powershella na ten program C#?
 
 ---
+
+Piosenki z błędami: 
+ 
+══ [WARN] Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu) (6x)
+    Ludowe/pedro_i_kury.tex
+      -> Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu): 'Ciężka jest droga do Rio...' [strofka 4]
+
+    Sebastian_Lenartowicz/Czerwona_flanela.tex
+      -> Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu): 'O, czerwona flanela...' [strofka 8]
+
+    Stare_Dobre_Malzenstwo/piosenka_dla_juniora_i_jego_gitary.tex
+      -> Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu): 'Skocz w pudło gitary...' [strofka 4]
+
+    Tomasz_Jarmuzewski/Jak_okiem_siegnac.tex
+      -> Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu): 'Zabieram marzeń...' [strofka 5]
+
+══ [WARN] Brak wykonawcy w \tytul (3x)
+    Rozne/Przytulek_dla_poetow.tex
+      -> \tytul: pusty trzeci argument (wykonawca)
+
+    Rozne/Ptaki.tex
+      -> \tytul: pusty trzeci argument (wykonawca)
+
+    Rozne/Zegar.tex
+      -> \tytul: pusty trzeci argument (wykonawca)
+
+══ [WARN] Podejrzane: \hfill bez \break (1x)
+    na_bani/Poezja.tex
+
+Ręcznie wynotowane:
+Koczewski - jeszcze nie czas, skrócony refren w HTMLu się rozwala i przez to pdf też tak sobie wygląda
+Koczewski - Jesienne Wino jest nieprawidłowo sklejone w jedno
+Szemkel siódmy anioł - też trzeba poprawić, wstęp się rozwala
+Kolorowy wiatr jak wyżej też się psuje
+Molly Maquires - mamy \hfill\break na początku refrenu jako Hej bez chwytów, może tam jednak tylda lepiej by była?
+Pożegnalny wieczór jest cały rozwalony
+Pogodne popołudnie kapitana białej floty - do ogarnięcia jak to zrobić dobrze z alternatywną wersją chwytów
+Do świtu - nawet jak się poprawi wyświetlane (pierwszy punkt z poprawek w pwsh), to i tak dobrze jest "dokleić" przygrywkę do refrenu.
+Kołysanka dla Joanny I - coś tam się nie zgadza, wygląda bardzo dziwnie, to generalnej poprawki.
+
+Dodać piosenki:
+Kubański szlak
+Zaczarowana gitara
+---
+Do poprawki w obecnej wersji powrshellowej:
+
+Do świtu: wersja chord only pair nie działa dobrze jeśli są same chwyty bez żadnego tekstu. Niech będzie poprawione.
 
 BUG: przy oknie tak wąskim że nie widać spisu treści, znika scrollbar.
 

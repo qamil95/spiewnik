@@ -20,16 +20,6 @@ Przede wszystkim dodać je (oraz te co już są na branchu obok scommitowane z p
     Tomasz_Jarmuzewski/Jak_okiem_siegnac.tex
       -> Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu): 'Zabieram marzeń...' [strofka 5]
 
-══ [WARN] Brak wykonawcy w \tytul (3x)
-    Rozne/Przytulek_dla_poetow.tex
-      -> \tytul: pusty trzeci argument (wykonawca)
-
-    Rozne/Ptaki.tex
-      -> \tytul: pusty trzeci argument (wykonawca)
-
-    Rozne/Zegar.tex
-      -> \tytul: pusty trzeci argument (wykonawca)
-
 ══ [WARN] Podejrzane: \hfill bez \break (1x)
     na_bani/Poezja.tex
 
@@ -49,8 +39,6 @@ Kubański szlak
 Zaczarowana gitara
 ---
 Do poprawki w obecnej wersji powrshellowej:
-
-Do świtu: wersja chord only pair nie działa dobrze jeśli są same chwyty bez żadnego tekstu. Niech będzie poprawione.
 
 BUG: przy oknie tak wąskim że nie widać spisu treści, znika scrollbar.
 

@@ -18,7 +18,6 @@ const DIFF_DIR = path.join(__dirname, 'snapshots_diff');
 const THRESHOLD_PX = 30; // max 30 pikseli roznic (antyaliasing), powyzej = fail
 
 const SONGS = [
-  { title: 'Kolory miasta',                          artist: 'Myśli Rozczochrane Wiatrem Zapisane' },
   { title: 'Chyba już czas',                         artist: 'Adam Drąg' },
   { title: 'Ech muzyka',                             artist: 'Adam Drąg' },
   { title: 'Jeszcze nie czas',                       artist: 'Andrzej Koczewski' },
@@ -62,6 +61,7 @@ const SONGS = [
   { title: 'Irlandzki wędrowiec',                    artist: 'Mechanicy Shanty' },
   { title: 'Molly Maquires',                         artist: 'Mechanicy Shanty' },
   { title: 'Kamienie',                               artist: 'Myśli Rozczochrane' },
+  { title: 'Kolory miasta',                          artist: 'Myśli Rozczochrane Wiatrem Zapisane' },
   { title: 'Ballada o św. Mikołaju',                 artist: 'SETA' },
   { title: 'Blues rybaka',                           artist: 'Słodki Całus od Buby' },
   { title: 'Jak',                                    artist: 'Stare Dobre Małżeństwo' },

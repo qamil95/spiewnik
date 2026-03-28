@@ -1,7 +1,13 @@
 #!/usr/bin/env pwsh
 # Spiewnik Web Generator v2.0
 $SCRIPT_VERSION = "2.0"
-$MAIN_DIR = Join-Path $PSScriptRoot "main"
+# Resolve repository root: if parent contains 'main', use it (script moved to HtmlGenerator)
+$repoRoot = $PSScriptRoot
+if (-not (Test-Path (Join-Path $repoRoot 'main'))) {
+  $parent = Split-Path -Parent $PSScriptRoot
+  if (Test-Path (Join-Path $parent 'main')) { $repoRoot = $parent }
+}
+$MAIN_DIR = Join-Path $repoRoot "main"
 
 # ── PARSER ───────────────────────────────────────────────────────────────────
 

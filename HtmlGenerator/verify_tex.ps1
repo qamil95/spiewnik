@@ -1,6 +1,11 @@
 #!/usr/bin/env pwsh
 # Weryfikator plikow .tex ze spiewnika
-$MAIN_DIR = Join-Path $PSScriptRoot "main"
+$repoRoot = $PSScriptRoot
+if (-not (Test-Path (Join-Path $repoRoot 'main'))) {
+    $parent = Split-Path -Parent $PSScriptRoot
+    if (Test-Path (Join-Path $parent 'main')) { $repoRoot = $parent }
+}
+$MAIN_DIR = Join-Path $repoRoot "main"
 
 $KNOWN_COMMANDS = @(
     'tytul','begin','end','vin','hfill','break','chordfill',

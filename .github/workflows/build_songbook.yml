@@ -56,12 +56,6 @@ jobs:
         root_file: "Spiewnik_chwyty.tex"
         working_directory: "Songbook v2.0 r${{github.run_number}}"
         
-    - name: Compile songbook A5
-      uses: xu-cheng/latex-action@v2
-      with:
-        root_file: "Spiewnik_chwyty_a5.tex"
-        working_directory: "Songbook v2.0 r${{github.run_number}}"
-        
     - name: Upload generated PDF A4
       uses: actions/upload-artifact@v6
       with:
@@ -74,6 +68,12 @@ jobs:
         name: Songbook v2.0 r${{github.run_number}}_pdf_log
         path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty.log
         
+    - name: Compile songbook A5
+      uses: xu-cheng/latex-action@v2
+      with:
+        root_file: "Spiewnik_chwyty_a5.tex"
+        working_directory: "Songbook v2.0 r${{github.run_number}}"
+
     - name: Upload generated PDF A5
       uses: actions/upload-artifact@v6
       with:

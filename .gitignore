@@ -610,3 +610,7 @@ TSWLatexianTemp*
 
 # PDF output
 *.pdf
+
+# Generated HTMLs
+spiewnik.html
+verify_spiewnik.html

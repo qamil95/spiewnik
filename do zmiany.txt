@@ -1,0 +1,11 @@
+A może lepiej jednak zrobić to na zasadzie programu C# który już mamy tutaj otwarty i dostępny? SonglistGenerator mógłby mieć alternatywny przełącznik, który zamiast dostosować pliki .tex do bycia prawidłowo skompilowanymi przez latexa, to by utworzył ten HTML? Cała rezta funkcjonalności musi w nim być zachowana, więc to trochę roboty z przepisaniem, ale wydaje mi się że to bardziej spójne rozwiązanie. Szczególnie że jakaś forma parsowania plików już jest tam zawarta, więc powinno być nieco łatwiej się dołączyć w istniejące rozwiązanie. Przepiszesz całego powershella na ten program C#?
+
+---
+
+\textit{Alternatywnie:} w środku sekcji chwytów oznacza alternatywną wersję chwytów, nie radzisz sobie z tym wcale.
+
+Nowa funkcjonalność do dodania i pokrycia testami: Dodawane nowych piosenek - dialog w ktorym wpisujemy wszystkie potrzebne dane, tekst piosenki oraz chwyty, i potem po kliknięciu generuje sie plik tex - i zapisuje się tak samo jak eksport ustawień, też pod prawidłową nazwą. Ten plik tex jest przeznaczony i gotowy do wrzucenia do repozytorium ręcznie, i potem wygenerowania samemu nowego htmla i pdfa. Przycisk ma być w górnym menu, po lewej stronie od usunięcia piosenki oraz od listy usuniętych piosenek, po prawej od ustawień.
+
+Nowa funkcjonalność do dodania i pokrycia testami:  Ustawienie rozmiaru czcionki przyciskami plus i minus gdzieś w headerze? Teraz można jedynie zmieniać rozmiar w przeglądarce zoomując, ale fajnie by to było mieć na UI. Też z resetem do defaulta. Przyciski od tego pomiędzy trzema (tryb widoku oraz source view), a całą dużą sekcją dodaj usuń eskportuj importuj.
+
+Nowa funkcjonalność do dodania i pokrycia testami: skróty klawiszowe. Fajnie jakby z klawiatury dało się wszystko zrobić, przełączenia piosenek, po wpisaniu w szukajkę kliknięcie strzałką w dół żeby wybrać piosenkę do otwarcia i otworzyć enterem, może wciśnięcie numerka od 0 do 9 żeby otworzyło coś z wylosowanych, na pewno oznazcenie jako zaśpiewana piosenka.

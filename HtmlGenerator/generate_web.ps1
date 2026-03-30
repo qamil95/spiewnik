@@ -279,7 +279,7 @@ $css = @'
   --refrain:#b07000;--sung:#2e8b40;
   --chord-color:#1565c0;
 }
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:Inter,Roboto,system-ui,sans-serif;min-height:100vh;overflow:hidden}
 
 /* HEADER */
 #header{background:var(--bg2);border-bottom:2px solid var(--accent);padding:10px 14px;position:sticky;top:0;z-index:100;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -384,7 +384,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .tex-it{font-style:italic;opacity:0.7}
 .pair-chord sup,.raw-chord-line sup{font-size:0.85em;vertical-align:super;line-height:0}
 .song-body.mode-above .pair-text.refrain{color:var(--refrain);padding-left:1.4em;font-style:italic}
-.song-body.mode-above .pair-chord{font-family:'Courier New',monospace;font-size:0.8rem;color:var(--chord-color);line-height:1.2;min-height:1em;white-space:pre}
+.song-body.mode-above .pair-chord{font-family:'DejaVu Sans Mono',Consolas,monospace;font-size:0.8rem;color:var(--chord-color);line-height:1.2;min-height:1em;white-space:pre}
 .song-body.mode-above .pair-chord:empty{min-height:0;line-height:0}
 .song-body.mode-above .pair-chord.refrain-chord{padding-left:1.4em}
 .song-body.mode-above .chord-only-pair .pair-text{display:none}
@@ -396,7 +396,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .song-body.mode-inline .song-pair{display:contents}
 .song-body.mode-inline .pair-text{line-height:24px;white-space:nowrap}
 .song-body.mode-inline .pair-text.refrain{color:var(--refrain);font-style:italic;padding-left:1.4em}
-.song-body.mode-inline .pair-chord{font-family:'Courier New',monospace;font-size:0.8rem;color:var(--chord-color);line-height:24px;white-space:nowrap}
+.song-body.mode-inline .pair-chord{font-family:'DejaVu Sans Mono',Consolas,monospace;font-size:0.8rem;color:var(--chord-color);line-height:24px;white-space:nowrap}
 .song-body.mode-inline .pair-chord:empty{visibility:hidden}
 .song-body.mode-inline .chord-only-pair .pair-text{visibility:hidden}
 .song-body.mode-inline .chord-only-pair .pair-chord{opacity:.85}
@@ -479,8 +479,8 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .raw-sep:nth-child(odd){border-right:1px solid var(--border)}
 .raw-strophe.refrain .raw-line{color:var(--refrain);font-style:italic;padding-left:1.2em}
 .raw-line,.raw-chord-line{font-size:0.9rem;line-height:22px;white-space:pre-wrap}
-.raw-line{font-family:'Segoe UI',system-ui,sans-serif;color:var(--text)}
-.raw-chord-line{font-family:'Courier New',monospace;color:var(--chord-color)}
+.raw-line{font-family:Inter,Roboto,system-ui,sans-serif;color:var(--text)}
+.raw-chord-line{font-family:'DejaVu Sans Mono',Consolas,monospace;color:var(--chord-color)}
 
 /* SCROLLBARS */
 ::-webkit-scrollbar{width:6px;height:6px}

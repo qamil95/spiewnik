@@ -1,3 +1,8 @@
+BEFORE MERGE TO MASTER
+Instalowanie playwright browsers trochę trwa. Może dałoby się to ominąć, żeby mieć jakiegoś gotowca z nimi? Może jakiś docker już ktoś zrobił, github action z zainstalowanym tym albo na przykład runs-on?
+
+
+
 Generalna rzecz:
 A może lepiej jednak zrobić to na zasadzie programu C# który już mamy tutaj otwarty i dostępny? SonglistGenerator mógłby mieć alternatywny przełącznik, który zamiast dostosować pliki .tex do bycia prawidłowo skompilowanymi przez latexa, to by utworzył ten HTML? Cała rezta funkcjonalności musi w nim być zachowana, więc to trochę roboty z przepisaniem, ale wydaje mi się że to bardziej spójne rozwiązanie. Szczególnie że jakaś forma parsowania plików już jest tam zawarta, więc powinno być nieco łatwiej się dołączyć w istniejące rozwiązanie. Przepiszesz całego powershella na ten program C#?
 

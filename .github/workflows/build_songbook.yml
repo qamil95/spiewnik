@@ -103,6 +103,9 @@ jobs:
       working-directory: HtmlGenerator
       run: npm install
 
+    - name: Install fonts
+      run: sudo apt-get install -y fonts-inter
+
     - name: Install Playwright browsers
       working-directory: HtmlGenerator
       run: npx playwright install --with-deps chromium
@@ -110,6 +113,12 @@ jobs:
     - name: Generate HTML
       working-directory: HtmlGenerator
       run: pwsh ./generate_web.ps1 -BuildNumber "r${{github.run_number}}"
+
+    - name: Upload HTML
+      uses: actions/upload-artifact@v6
+      with:
+        name: Spiewnik v3.0 r${{github.run_number}}_html
+        path: HtmlGenerator/spiewnik.html
 
     - name: Run functional tests
       id: functional_tests
@@ -120,13 +129,6 @@ jobs:
       id: song_display_tests
       working-directory: HtmlGenerator
       run: node song_display_test.js
-
-    - name: Upload HTML
-      if: success()
-      uses: actions/upload-artifact@v6
-      with:
-        name: Spiewnik v3.0 r${{github.run_number}}_html
-        path: HtmlGenerator/spiewnik.html
 
     - name: Upload functional test failure screenshots
       if: failure() && steps.functional_tests.outcome == 'failure'

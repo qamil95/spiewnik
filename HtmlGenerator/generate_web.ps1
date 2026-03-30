@@ -62,7 +62,7 @@ function Split-TexBlock($raw) {
     return [array]$lines
 }
 
-function Parse-Song($filePath, $artistFolder, $artistNameFallback) {
+function Parse-Song($filePath, $artistFolder, $artistNameFallback, $groupName) {
     $rawBytes = [System.IO.File]::ReadAllBytes($filePath)
     $utf8Strict = [System.Text.Encoding]::GetEncoding('utf-8', [System.Text.EncoderFallback]::ExceptionFallback, [System.Text.DecoderFallback]::ExceptionFallback)
     try { $raw = $utf8Strict.GetString($rawBytes) }
@@ -179,7 +179,7 @@ function Parse-Song($filePath, $artistFolder, $artistNameFallback) {
     if ($curLines.Count -gt 0) { $rawChordStrophes += [PSCustomObject]@{ Lines = $curLines.ToArray() } }
 
     $hasChords = ($rawChords -ne '') -and ($pairs | Where-Object { $_.C -ne '' }).Count -gt 0
-    return [PSCustomObject]@{ Id=$id; Title=$title; Authors=$authors; Artist=$artist; ArtistFolder=$artistFolder; HasChords=$hasChords; Pairs=[array]$pairs; FirstVerse=$firstVerse; FirstRefrain=$firstRefrain; RawStrophes=$rawStrophes; RawChordStrophes=$rawChordStrophes }
+    return [PSCustomObject]@{ Id=$id; Title=$title; Authors=$authors; Artist=$artist; ArtistFolder=$artistFolder; GroupName=$groupName; HasChords=$hasChords; Pairs=[array]$pairs; FirstVerse=$firstVerse; FirstRefrain=$firstRefrain; RawStrophes=$rawStrophes; RawChordStrophes=$rawChordStrophes }
 }
 
 function Get-AllSongs {
@@ -198,7 +198,7 @@ function Get-AllSongs {
         $mc = [regex]::Match($mfText, '\\chapter\{([^}]*)\}')
         $artistName = if ($mc.Success) { $mc.Groups[1].Value.Trim() } else { $dir.Name }
         foreach ($sf in (Get-ChildItem $dir.FullName -Filter '*.tex' | Where-Object Name -ne 'master.tex' | Sort-Object Name)) {
-            $s = Parse-Song $sf.FullName $dir.Name $artistName
+            $s = Parse-Song $sf.FullName $dir.Name $artistName $artistName
             if ($s) {
                 $songs.Add($s)
                 $count++
@@ -248,7 +248,7 @@ function Songs-ToJson($songs) {
             '{"lines":[' + $linesJson + ']}'
         }) -join ','
         $hc = if ($s.HasChords) { 'true' } else { 'false' }
-        '{"id":"'+(EJ $s.Id)+'","title":"'+(EJ $s.Title)+'","authors":"'+(EJ $s.Authors)+'","artist":"'+(EJ $s.Artist)+'","artistFolder":"'+(EJ $s.ArtistFolder)+'","hasChords":'+$hc+',"firstVerse":"'+(EJ $s.FirstVerse)+'","firstRefrain":"'+(EJ $s.FirstRefrain)+'","rawStrophes":['+ $rawStrophesJson +'],"rawChordStrophes":['+ $rawChordStrophesJson +'],"pairs":['+ $pairsJson +']}'
+        '{"id":"'+(EJ $s.Id)+'","title":"'+(EJ $s.Title)+'","authors":"'+(EJ $s.Authors)+'","artist":"'+(EJ $s.Artist)+'","artistFolder":"'+(EJ $s.ArtistFolder)+'","groupName":"'+(EJ $s.GroupName)+'","hasChords":'+$hc+',"firstVerse":"'+(EJ $s.FirstVerse)+'","firstRefrain":"'+(EJ $s.FirstRefrain)+'","rawStrophes":['+ $rawStrophesJson +'],"rawChordStrophes":['+ $rawChordStrophesJson +'],"pairs":['+ $pairsJson +']}'
     }
     return '[' + ($items -join ',') + ']'
 }
@@ -299,8 +299,8 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .toc-artist:hover{background:var(--card)}
 .toc-arrow{width:10px;height:10px;flex-shrink:0;border-right:2px solid var(--accent2);border-bottom:2px solid var(--accent2);transform:rotate(-45deg);transition:transform .18s;margin-right:2px}
 .toc-artist.open .toc-arrow{transform:rotate(45deg)}
-.toc-songs{display:none}
-.toc-songs.open{display:block}
+.toc-songs{overflow:hidden;max-height:0;transition:max-height .1s ease}
+.toc-songs.open{max-height:9999px}
 .toc-song{padding:4px 12px 4px 22px;font-size:0.8rem;cursor:pointer;color:var(--text);border-bottom:1px solid #ffffff08}
 .toc-song.nochords{color:var(--text2);opacity:0.6}
 .toc-song:hover{background:var(--card);color:var(--accent)}
@@ -445,6 +445,13 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .settings-label{font-size:0.75rem;color:var(--accent2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;font-weight:600}
 .settings-row{display:flex;gap:6px;flex-wrap:wrap}
 .settings-stats{font-size:0.82rem;color:var(--text2);line-height:1.7}
+.kbd-hint{font-size:0.6rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:0 4px;margin-left:4px;vertical-align:middle;display:none;font-family:monospace}
+.show-kbd .kbd-hint{display:inline}
+.rc-num{position:absolute;bottom:4px;right:6px;font-size:0.65rem!important}
+.rcard,.sitem{position:relative}
+.sr-item.sr-active{background:var(--card2);outline:1px solid var(--accent)}
+.shortcuts-list{font-size:0.82rem;color:var(--text2);line-height:2}
+.shortcuts-list kbd{background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:monospace;font-size:0.78rem;color:var(--text)}
 #hidden-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;width:min(600px,95vw);max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
 #hidden-list{overflow-y:auto;padding:8px 0}
 .hidden-item{display:flex;justify-content:space-between;align-items:center;padding:6px 16px;border-bottom:1px solid var(--border);font-size:0.85rem}
@@ -515,6 +522,7 @@ $js = @'
 // ── CHORD MODE ──────────────────────────────────────────────────────────────
 let chordMode=localStorage.getItem('sw_chordmode')||'above';
 let theme=localStorage.getItem('sw_theme')||'dark';
+let kbdHints=localStorage.getItem('sw_kbdhints')==='1';
 function setTheme(t){
   theme=t;localStorage.setItem('sw_theme',t);
   document.documentElement.classList.toggle('light',t==='light');
@@ -643,12 +651,15 @@ function getRandomSong(contextArtist){
 }
 
 // ── INDEX ──────────────────────────────────────────────────────────────────
-const byId={}, byArtist={}, order=[];
+const byId={}, byArtist={};
 for(const s of SONGS){
   byId[s.id]=s;
   (byArtist[s.artistFolder]=byArtist[s.artistFolder]||[]).push(s);
-  order.push(s.id);
 }
+const order=Object.keys(byArtist).sort((a,b)=>{
+  const na=byArtist[a][0].groupName,nb=byArtist[b][0].groupName;
+  return na.localeCompare(nb,'pl',{sensitivity:'base'});
+}).flatMap(af=>byArtist[af].map(s=>s.id));
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let curId=null, curArtist=null, searchTimer=null;
@@ -663,13 +674,13 @@ function buildToc(openArtist,scroll){
   const toc=el('toc'); toc.innerHTML='';
   const today=getTodaySet();
   const artists=Object.keys(byArtist).sort((a,b)=>{
-    const na=byArtist[a][0].artist, nb=byArtist[b][0].artist;
+    const na=byArtist[a][0].groupName, nb=byArtist[b][0].groupName;
     return na.localeCompare(nb,'pl',{sensitivity:'base'});
   });
   let activeSongEl=null;
   const hidden=getHidden();
   for(const af of artists){
-    const songs=byArtist[af].filter(s=>!hidden.has(s.id)), name=byArtist[af][0].artist;
+    const songs=byArtist[af].filter(s=>!hidden.has(s.id)), name=byArtist[af][0].groupName;
     if(!songs.length)continue;
     const isOpen=(af===openArtist)||(af===curArtist&&curId!==null);
     const hdr=document.createElement('div');
@@ -687,6 +698,7 @@ function buildToc(openArtist,scroll){
       const isActive=s.id===curId;
       d.className='toc-song'+(isActive?' active':'')+(sung?' sung':'')+(!s.hasChords?' nochords':'');
       d.textContent=s.title;
+      d._songId=s.id;
       d.onclick=()=>showSong(s.id,true);
       if(isActive)activeSongEl=d;
       list.appendChild(d);
@@ -698,6 +710,42 @@ function buildToc(openArtist,scroll){
     setTimeout(()=>activeSongEl.scrollIntoView({block:'center'}),60);
   }
 }
+function scrollSidebar(target){
+  const sidebar=el('sidebar');
+  const start=sidebar.scrollTop,dist=target-start;
+  if(Math.abs(dist)<5){sidebar.scrollTop=target;return}
+  const dur=100;
+  const t0=performance.now();
+  function step(now){
+    const p=Math.min((now-t0)/dur,1);
+    const ease=p<0.5?2*p*p:(1-Math.pow(-2*p+2,2)/2);
+    sidebar.scrollTop=start+dist*ease;
+    if(p<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function updateTocActive(scroll){
+  const toc=el('toc');
+  const prev=toc.querySelector('.toc-song.active');
+  if(prev)prev.classList.remove('active');
+  const songs=toc.querySelectorAll('.toc-song');
+  for(const d of songs){
+    if(d._songId===curId){
+      d.classList.add('active');
+      const list=d.parentElement;
+      if(list&&!list.classList.contains('open')){list.classList.add('open');list.previousElementSibling?.classList.add('open')}
+      if(scroll)setTimeout(()=>{
+        const sidebar=el('sidebar');
+        const sRect=sidebar.getBoundingClientRect();
+        const dRect=d.getBoundingClientRect();
+        const headerH=40;
+        const target=dRect.top-sRect.top+sidebar.scrollTop-headerH-10;
+        scrollSidebar(target);
+      },80);
+      break;
+    }
+  }
+}
 
 // ── RENDER RANDOM ──────────────────────────────────────────────────────────
 function renderRandom(containerId, contextArtist){
@@ -707,10 +755,12 @@ function renderRandom(containerId, contextArtist){
   wrap.innerHTML='';
   const isGrid=(containerId==='random-grid');
   const c=getCounts();
+  let cardIdx=0;
   for(const {s,top,same} of items){
     const sung=today.has(s.id);
     const d=document.createElement('div');
     d.className=(isGrid?'rcard':'sitem')+(top?' top':'')+(same?' same':'')+(sung?' sung':'');
+    if(cardIdx<10){const nb=document.createElement('span');nb.className='kbd-hint rc-num';nb.textContent=''+(cardIdx===9?0:cardIdx+1);d.appendChild(nb)}
     const t=document.createElement('div');
     t.className=isGrid?'rc-title':'si-title';
     t.textContent=s.title;
@@ -724,6 +774,7 @@ function renderRandom(containerId, contextArtist){
     if(pc>0){const badge=document.createElement('div');badge.className='rc-plays';badge.textContent='\u266A '+pc+'x';d.appendChild(badge)}
     if(!isGrid)d.onclick=()=>showSong(s.id);
     wrap.appendChild(d);
+    cardIdx++;
   }
 }
 
@@ -801,7 +852,7 @@ function showHome(){
 function showArtist(af){
   curArtist=af;curId=null;
   const songs=byArtist[af];if(!songs)return;
-  const name=songs[0].artist;
+  const name=songs[0].groupName;
   el('av-artist-name').textContent=name;
   el('av-song-count').textContent=songs.length+' '+(songs.length===1?'utw\u00F3r':songs.length<5?'utwory':'utwor\u00F3w');
   const grid=el('av-grid');grid.innerHTML='';
@@ -818,7 +869,8 @@ function showArtist(af){
     const t=document.createElement('div');t.className='rc-title';t.textContent=s.title;
     t.onclick=()=>showSong(s.id);
     d.appendChild(t);
-    if(c[s.id]>0){const cnt=document.createElement('div');cnt.className='rc-artist';cnt.textContent='\u266A '+c[s.id]+'x';d.appendChild(cnt)}
+    if(s.artist!==s.groupName){const a=document.createElement('div');a.className='rc-artist';a.textContent=s.artist;d.appendChild(a)}
+    if(c[s.id]>0){const cnt=document.createElement('div');cnt.className='rc-plays';cnt.textContent='\u266A '+c[s.id]+'x';d.appendChild(cnt)}
     grid.appendChild(d);
   }
   el('home-view').style.display='none';
@@ -835,19 +887,19 @@ function showSong(id,fromToc){
   const s=byId[id]; if(!s)return;
   curId=id;curArtist=s.artistFolder;
   el('sv-title').textContent=s.title;
-  el('sv-artist').textContent=s.artist;
+  el('sv-artist').textContent=s.groupName+(s.artist!==s.groupName?' ('+s.artist+')':'');
   el('sv-authors').textContent=s.authors?('('+s.authors+')'):'';
   const pc=getCounts()[id]||0;
   el('sv-play-count').textContent=pc>0?('\u266A '+pc+'x'):'';
   updateSungBtn();
   updateHideBtn();
   const idx=order.indexOf(id);
-  el('sv-prev').disabled=(idx<=0);
-  el('sv-next').disabled=(idx>=order.length-1);
+  el('sv-prev').disabled=!order.slice(0,idx).some(x=>!isHidden(x));
+  el('sv-next').disabled=!order.slice(idx+1).some(x=>!isHidden(x));
   renderSongBody(s);
   setChordMode(chordMode);
   renderRandom('sv-random-list',s.artistFolder);
-  buildToc(null,!fromToc);
+  updateTocActive(!fromToc);
   // pokazujemy widok i scrollujemy dopiero po wyrenderowaniu tresci
   el('home-view').style.display='none';
   el('song-view').style.display='block';
@@ -977,14 +1029,14 @@ function importData(json){
 
 function updateSungBtn(){
   const btn=el('sv-sung-btn');
-  if(isSungToday(curId)){btn.textContent='\u2713 Za\u015bpiewana dzi\u015b';btn.classList.add('active')}
-  else{btn.textContent='\u266a Za\u015bpiewana!';btn.classList.remove('active')}
+  if(isSungToday(curId)){btn.innerHTML='\u2713 Za\u015bpiewana dzi\u015b <span class="kbd-hint">S</span>';btn.classList.add('active')}
+  else{btn.innerHTML='\u266a Za\u015bpiewana! <span class="kbd-hint">S</span>';btn.classList.remove('active')}
   const pc=getCounts()[curId]||0;
   el('sv-play-count').textContent=pc>0?('\u266A '+pc+'x'):'';
 }
 function updateHideBtn(){
   const btn=el('sv-hide-btn'),h=isHidden(curId);
-  btn.textContent=h?'\u21A9 przywr\u00F3\u0107':'\u2715 usu\u0144';
+  btn.innerHTML=(h?'\u21A9 przywr\u00F3\u0107':'\u2715 usu\u0144')+' <span class="kbd-hint">H</span>';
   btn.classList.toggle('btn-danger',!h);
   btn.classList.toggle('btn-restore',h);
   btn.classList.remove('btn-muted');
@@ -1050,11 +1102,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   el('sv-sung-btn').addEventListener('click',()=>{
     if(!curId)return;
     if(isSungToday(curId))unmarkSung(curId);else markSung(curId);
-    updateSungBtn();buildToc(null);
+    updateSungBtn();
+    const d=el('toc').querySelector('.toc-song.active');
+    if(d)d.classList.toggle('sung',isSungToday(curId));
   });
 
-  el('sv-prev').addEventListener('click',()=>{const i=order.indexOf(curId);if(i>0)showSong(order[i-1])});
-  el('sv-next').addEventListener('click',()=>{const i=order.indexOf(curId);if(i<order.length-1)showSong(order[i+1])});
+  el('sv-prev').addEventListener('click',()=>{const i=order.indexOf(curId);for(let j=i-1;j>=0;j--){if(!isHidden(order[j])){showSong(order[j]);return}}});
+  el('sv-next').addEventListener('click',()=>{const i=order.indexOf(curId);for(let j=i+1;j<order.length;j++){if(!isHidden(order[j])){showSong(order[j]);return}}});
 
   el('sv-raw-btn').addEventListener('click',()=>{if(curId)showRaw(curId)});
   el('raw-close').addEventListener('click',closeRaw);
@@ -1086,7 +1140,61 @@ document.addEventListener('DOMContentLoaded',()=>{
     };r.readAsText(f);e.target.value='';
   });
 
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeRaw();closeHiddenDialog();closeSettings();}});
+  document.addEventListener('keydown',e=>{
+    const tag=document.activeElement?.tagName;
+    const inInput=tag==='INPUT'||tag==='TEXTAREA';
+    const searchFocused=document.activeElement===el('search');
+    const searchOpen=el('search-results').classList.contains('open');
+    // Escape always works
+    if(e.key==='Escape'){
+      if(searchFocused){el('search').blur();hideSearch();return}
+      closeRaw();closeHiddenDialog();closeSettings();return;
+    }
+    // Search results navigation
+    if(searchOpen&&(e.key==='ArrowDown'||e.key==='ArrowUp'||e.key==='Enter')){
+      const items=[...el('search-results').querySelectorAll('.sr-item')];
+      if(!items.length)return;
+      const cur=el('search-results').querySelector('.sr-active');
+      let idx=cur?items.indexOf(cur):-1;
+      if(e.key==='ArrowDown'){e.preventDefault();if(cur)cur.classList.remove('sr-active');idx=Math.min(idx+1,items.length-1);items[idx].classList.add('sr-active');items[idx].scrollIntoView({block:'nearest'})}
+      else if(e.key==='ArrowUp'){e.preventDefault();if(cur)cur.classList.remove('sr-active');idx=Math.max(idx-1,0);items[idx].classList.add('sr-active');items[idx].scrollIntoView({block:'nearest'})}
+      else if(e.key==='Enter'){e.preventDefault();if(cur){const t=cur.querySelector('.sr-title');if(t)t.click()}}
+      return;
+    }
+    if(inInput)return;
+    // / to focus search
+    if(e.key==='/'){e.preventDefault();el('search').focus();return}
+    // Song view shortcuts
+    const inSong=el('song-view').style.display!=='none';
+    if(inSong){
+      if(e.key==='ArrowLeft'){const b=el('sv-prev');if(!b.disabled)b.click();return}
+      if(e.key==='ArrowRight'){const b=el('sv-next');if(!b.disabled)b.click();return}
+      if(e.key.toLowerCase()==='s'){el('sv-sung-btn').click();return}
+      if(e.key.toLowerCase()==='h'){el('sv-hide-btn').click();return}
+    }
+    // 1-9 open random suggestion
+    if(e.key>='0'&&e.key<='9'){
+      const grid=inSong?el('sv-random-list'):el('random-grid');
+      if(!grid)return;
+      const cards=grid.querySelectorAll(inSong?'.sitem':'.rcard');
+      const i=e.key==='0'?9:parseInt(e.key)-1;
+      if(i<cards.length){const t=cards[i].querySelector(inSong?'.si-title':'.rc-title');if(t)t.click()}
+      return;
+    }
+  });
+
+  // kbd hints toggle
+  function updateKbdHints(){
+    document.body.classList.toggle('show-kbd',kbdHints);
+    const btn=el('set-kbd-hints');
+    if(btn)btn.classList.toggle('active',kbdHints);
+  }
+  el('set-kbd-hints').addEventListener('click',()=>{
+    kbdHints=!kbdHints;
+    localStorage.setItem('sw_kbdhints',kbdHints?'1':'0');
+    updateKbdHints();
+  });
+  updateKbdHints();
 
   el('menu-btn').addEventListener('click',openSidebar);
   el('sidebar-overlay').addEventListener('click',closeSidebar);
@@ -1119,23 +1227,23 @@ $html = @"
   <button id="menu-btn">&#9776;</button>
   <button id="header-logo">&#127928; Spiewnik v2.0</button>
   <div id="search-wrap">
-    <input id="search" type="text" placeholder="Szukaj piosenki, wykonawcy, tekstu..." autocomplete="off" spellcheck="false">
+    <input id="search" type="text" placeholder="Szukaj piosenki, wykonawcy, tekstu...  /" autocomplete="off" spellcheck="false">
     <button id="search-clear" class="search-clear">&#x2715;</button>
     <div id="search-results"></div>
   </div>
   <div id="header-meta"><span id="meta-info"></span></div>
   <button class="btn-mode" id="sv-raw-btn" style="display:none">&#128196; surowy plik</button>
   <span class="header-right">
-    <button class="btn-mode btn-muted" id="btn-settings">&#9881; ustawienia</button>
     <button class="btn-mode btn-danger" id="sv-hide-btn" style="display:none">&#10005; usu&#x0144;</button>
     <button class="btn-mode btn-muted" id="btn-hidden-list">&#128465; usuni&#x0119;te</button>
+    <button class="btn-mode btn-muted" id="btn-settings">&#9881; ustawienia</button>
   </span>
 </div>
 
 <div id="sidebar-overlay"></div>
 
 <div id="app">
-  <nav id="sidebar"><div id="toc"></div></nav>
+  <nav id="sidebar"><div id="toc" style="padding-top:2px"></div></nav>
   <div id="main">
 
     <div id="home-view">
@@ -1177,11 +1285,11 @@ $html = @"
         <div class="sv-col-side">
           <div class="sv-actions">
             <div class="sv-actions-row">
-              <button class="btn" id="sv-prev">&#9664; Poprzednia</button>
-              <button class="btn" id="sv-next">Nast&#x0119;pna &#9654;</button>
+              <button class="btn" id="sv-prev">&#9664; Poprzednia <span class="kbd-hint">&#8592;</span></button>
+              <button class="btn" id="sv-next">Nast&#x0119;pna &#9654; <span class="kbd-hint">&#8594;</span></button>
             </div>
             <div class="sv-actions-row">
-              <button class="btn btn-sung" id="sv-sung-btn">&#9836; Za&#x015B;piewana!</button>
+              <button class="btn btn-sung" id="sv-sung-btn">&#9836; Za&#x015B;piewana! <span class="kbd-hint">S</span></button>
               <button class="btn btn-home" onclick="showHome()">&#8962; Strona g&#x0142;&#x00F3;wna</button>
             </div>
           </div>
@@ -1248,6 +1356,23 @@ $html = @"
       <div class="settings-section">
         <div class="settings-label">Statystyki</div>
         <div id="settings-stats" class="settings-stats"></div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-label">Skr&#243;ty klawiszowe</div>
+        <div class="settings-row" style="margin-bottom:8px">
+          <button class="btn-mode" id="set-kbd-hints">poka&#x017C; hinty na przyciskach</button>
+        </div>
+        <div class="shortcuts-list">
+          <kbd>/</kbd> szukaj<br>
+          <kbd>Esc</kbd> zamknij / wyczy&#x015B;&#x0107;<br>
+          <kbd>&#8592;</kbd> poprzednia piosenka<br>
+          <kbd>&#8594;</kbd> nast&#x0119;pna piosenka<br>
+          <kbd>S</kbd> za&#x015B;piewana<br>
+          <kbd>H</kbd> usu&#x0144; / przywr&#243;&#x0107;<br>
+          <kbd>1</kbd>-<kbd>9</kbd>, <kbd>0</kbd> otw&#243;rz losow&#x0105;<br>
+          <kbd>&#8595;</kbd><kbd>&#8593;</kbd> nawiguj wyniki<br>
+          <kbd>Enter</kbd> otw&#243;rz wybrany wynik<br>
+        </div>
       </div>
     </div>
   </div>

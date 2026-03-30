@@ -160,16 +160,18 @@ async function run() {
     const viewIssues = [];
 
     // above
-    await page.evaluate(id => { showSong(id); setChordMode('above'); }, found.id);
+    await page.evaluate(id => { showSong(id); setChordMode('above'); el('main').scrollTop=0; }, found.id);
     await page.waitForSelector('#sv-body .song-pair', { timeout: 500 }).catch(()=>{});
+    await page.waitForTimeout(50);
     await snap('above', '#sv-body');
 
     // inline (just CSS switch, no wait needed)
-    await page.evaluate(() => setChordMode('inline'));
+    await page.evaluate(() => { setChordMode('inline'); el('main').scrollTop=0; });
+    await page.waitForTimeout(50);
     await snap('inline', '#sv-body');
 
     // raw
-    await page.evaluate(id => showRaw(id), found.id);
+    await page.evaluate(id => { showRaw(id); }, found.id);
     await page.waitForSelector('#raw-cols .raw-col-label', { timeout: 500 }).catch(()=>{});
     await snap('raw', '#raw-cols');
     await page.evaluate(() => { if (typeof closeRaw === 'function') closeRaw(); });

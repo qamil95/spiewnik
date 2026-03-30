@@ -1049,6 +1049,108 @@ async function run() {
     await page.evaluate(() => localStorage.clear());
   });
 
+  // ── SKROTY KLAWISZOWE ────────────────────────────────────────────────
+
+  console.log('\n  Skroty klawiszowe');
+
+  await test('Klawiatura - / fokusuje wyszukiwarke', async () => {
+    await page.evaluate(() => { showHome(); el('search').blur(); });
+    await page.keyboard.press('/');
+    const focused = await page.evaluate(() => document.activeElement === el('search'));
+    assert(focused, 'Wyszukiwarka powinna byc sfokusowana');
+    await page.evaluate(() => hideSearch());
+  });
+
+  await test('Klawiatura - Escape zamyka wyszukiwarke', async () => {
+    await page.evaluate(() => { el('search').focus(); });
+    await page.keyboard.type('test');
+    await page.keyboard.press('Escape');
+    const focused = await page.evaluate(() => document.activeElement !== el('search'));
+    assert(focused, 'Wyszukiwarka nie powinna byc sfokusowana');
+  });
+
+  await test('Klawiatura - strzalki nawiguja wyniki wyszukiwania', async () => {
+    const title = await page.evaluate(() => SONGS.find(s => s.hasChords).title);
+    await page.evaluate(() => el('search').focus());
+    await page.fill('#search', title);
+    await page.evaluate(q => doSearch(q), title);
+    await page.keyboard.press('ArrowDown');
+    const hasActive = await page.$eval('.sr-item.sr-active', el => !!el).catch(() => false);
+    assert(hasActive, 'Powinien byc aktywny wynik');
+    await page.evaluate(() => hideSearch());
+  });
+
+  await test('Klawiatura - Enter otwiera wybrany wynik', async () => {
+    const title = await page.evaluate(() => SONGS.find(s => s.hasChords).title);
+    await page.evaluate(() => el('search').focus());
+    await page.fill('#search', title);
+    await page.evaluate(q => doSearch(q), title);
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    const inSong = await page.$eval('#song-view', el => el.style.display !== 'none');
+    assert(inSong, 'Powinien byc widok piosenki');
+  });
+
+  await test('Klawiatura - strzalki przelaczaja piosenki', async () => {
+    const id = await page.evaluate(() => SONGS.filter(s => s.hasChords)[0].id);
+    await page.evaluate(id => showSong(id), id);
+    const before = await page.evaluate(() => curId);
+    await page.click('#sv-body');
+    await page.keyboard.press('ArrowRight');
+    const after = await page.evaluate(() => curId);
+    assert(before !== after, 'Piosenka powinna sie zmienic');
+  });
+
+  await test('Klawiatura - S oznacza jako zaspiewana', async () => {
+    await page.evaluate(() => localStorage.clear());
+    const id = await page.evaluate(() => SONGS.find(s => s.hasChords).id);
+    await page.evaluate(id => showSong(id), id);
+    await page.click('#sv-body');
+    await page.keyboard.press('s');
+    const sung = await page.evaluate(() => isSungToday(curId));
+    assert(sung, 'Piosenka powinna byc oznaczona jako zaspiewana');
+    await page.evaluate(() => localStorage.clear());
+  });
+
+  await test('Klawiatura - H ukrywa piosenke', async () => {
+    await page.evaluate(() => localStorage.clear());
+    const id = await page.evaluate(() => SONGS.find(s => s.hasChords).id);
+    await page.evaluate(id => showSong(id), id);
+    await page.click('#sv-body');
+    await page.keyboard.press('h');
+    const hidden = await page.evaluate(() => isHidden(curId));
+    assert(hidden, 'Piosenka powinna byc ukryta');
+    await page.keyboard.press('h');
+    const unhidden = await page.evaluate(() => !isHidden(curId));
+    assert(unhidden, 'Piosenka powinna byc przywrocona');
+    await page.evaluate(() => localStorage.clear());
+  });
+
+  await test('Klawiatura - 1 otwiera pierwsza losowa', async () => {
+    await page.evaluate(() => showHome());
+    const hasSongs = await page.$$eval('#random-grid .rcard', els => els.length);
+    if (hasSongs > 0) {
+      await page.click('#random-grid');
+      await page.keyboard.press('1');
+      const inSong = await page.$eval('#song-view', el => el.style.display !== 'none');
+      assert(inSong, 'Powinien otworzyc piosenke');
+    }
+  });
+
+  await test('Klawiatura - hinty toggle w ustawieniach', async () => {
+    await page.evaluate(() => localStorage.clear());
+    await page.evaluate(() => showSettings());
+    await page.click('#set-kbd-hints');
+    const hasClass = await page.evaluate(() => document.body.classList.contains('show-kbd'));
+    assert(hasClass, 'Body powinno miec klase show-kbd');
+    const stored = await page.evaluate(() => localStorage.getItem('sw_kbdhints'));
+    assertEqual(stored, '1', 'Hinty powinny byc zapisane');
+    await page.click('#set-kbd-hints');
+    const noClass = await page.evaluate(() => !document.body.classList.contains('show-kbd'));
+    assert(noClass, 'Body nie powinno miec klasy show-kbd');
+    await page.evaluate(() => { closeSettings(); localStorage.clear(); });
+  });
+
   // ── RESPONSIVE LAYOUT ──────────────────────────────────────────────────
 
   const origSize = page.viewportSize();

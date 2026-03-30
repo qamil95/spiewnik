@@ -5,10 +5,10 @@ A może lepiej jednak zrobić to na zasadzie programu C# który już mamy tutaj 
 
 Piosenki z błędami: 
 
-Sprawdzić DO ŚWITU w wersji PDFowej czy działa OK, jeśli dokleimy przygrywkę do normalnej piosenki.
+!!! Zmienić DO ŚWITU na doklejone przygrywki do reszty piosenek. W wersji PDFowej sprawdzić czy działa OK po tej zmianie, html wyglądał spoko.
+Andrzej Mróz OD TURBACZA też jest tam coś zdupcone ze sklejonymi przygrywkami.
 
-Przede wszystkim dodać je (oraz te co już są na branchu obok scommitowane z poprawkami) do testów automatycznych.
- 
+
 ══ [WARN] Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu) (6x)
     Ludowe/pedro_i_kury.tex
       -> Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu): 'Ciężka jest droga do Rio...' [strofka 4]
@@ -38,8 +38,8 @@ Do poprawki w obecnej wersji powrshellowej:
 
 \textit{Alternatywnie:} w środku sekcji chwytów oznacza alternatywną wersję chwytów, nie radzisz sobie z tym wcale.
 
-Nowa funkcjonalność do dodania i pokrycia testami: Dodawane nowych piosenek - dialog w ktorym wpisujemy wszystkie potrzebne dane, tekst piosenki oraz chwyty, i potem po kliknięciu generuje sie plik tex - i zapisuje się tak samo jak eksport ustawień, też pod prawidłową nazwą. Ten plik tex jest przeznaczony i gotowy do wrzucenia do repozytorium ręcznie, i potem wygenerowania samemu nowego htmla i pdfa. Przycisk ma być w górnym menu, po lewej stronie od usunięcia piosenki oraz od listy usuniętych piosenek, po prawej od ustawień.
+Nowa funkcjonalność do dodania i pokrycia testami: przycisk następna i poprzednia działa w dziwny sposób, bo np. z olka grotowskiego kolejny na liście jest Pelton, a my wpadamy w grzmiącą półlitrówę z jakiegoś powodu. Zgórmysyny mają podobny problem. Powinno to iść w tej samej kolejności co spis treści. No i poza tym, badzo ten spis skacze przy przewijaniu lub zmienianiu piosenek, trochę bardziej smooth to by mogło isć.
 
-Nowa funkcjonalność do dodania i pokrycia testami:  Ustawienie rozmiaru czcionki przyciskami plus i minus gdzieś w headerze? Teraz można jedynie zmieniać rozmiar w przeglądarce zoomując, ale fajnie by to było mieć na UI. Też z resetem do defaulta. Przyciski od tego pomiędzy trzema (tryb widoku oraz source view), a całą dużą sekcją dodaj usuń eskportuj importuj.
+Nowa funkcjonalność do dodania i pokrycia testami: Dodawane nowych piosenek - dialog w ktorym wpisujemy wszystkie potrzebne dane, tekst piosenki oraz chwyty, i potem po kliknięciu generuje sie plik tex - i zapisuje się tak samo jak eksport ustawień, też pod prawidłową nazwą. Ten plik tex jest przeznaczony i gotowy do wrzucenia do repozytorium ręcznie, i potem wygenerowania samemu nowego htmla i pdfa. Przycisk ma być w górnym menu, po lewej stronie przy przycisku SUROWY PLIK.
 
-Nowa funkcjonalność do dodania i pokrycia testami: skróty klawiszowe. Fajnie jakby z klawiatury dało się wszystko zrobić, przełączenia piosenek, po wpisaniu w szukajkę kliknięcie strzałką w dół żeby wybrać piosenkę do otwarcia i otworzyć enterem, może wciśnięcie numerka od 0 do 9 żeby otworzyło coś z wylosowanych, na pewno oznazcenie jako zaśpiewana piosenka.
+Nowa funkcjonalność do dodania i pokrycia testami:  Ustawienie rozmiaru czcionki przyciskami plus i minus gdzieś w headerze? Teraz można jedynie zmieniać rozmiar w przeglądarce zoomując, ale fajnie by to było mieć na UI. Też z resetem do defaulta. Przyciski od tego pomiędzy surowym plikiem/dodawniame piosenki, a całą resztą z usuwaniem i ustawieniami.

@@ -1,4 +1,4 @@
-# Śpiewnik v2.0 - Kontekst projektu
+# Śpiewnik v3.0 - Kontekst projektu
 
 ## Co to jest
 Śpiewnik gitarowy - baza piosenek w plikach .tex (LaTeX), generowana do jednego pliku HTML (spiewnik.html) przez skrypt PowerShell (generate_web.ps1). Offline, bez serwera.
@@ -19,7 +19,7 @@
 5. **HTML** - double-quoted here-string @"..."@ z interpolacją PS ($css, $SCRIPT_VERSION, $timestamp)
 6. **Składanie** - placeholdery SONGS_PLACEHOLDER i __PL_*__ zamieniane na końcu
 
-## Zaimplementowane funkcje (v2.0)
+## Zaimplementowane funkcje (v3.0)
 - **Widoki**: strona główna, artysta (kafelki), piosenka (chwyty nad/obok), raw view (surowy plik)
 - **Losowanie**: top 25% (najczęściej grane) + reszta 75%, max 1 artysta raz, bez dzisiejszych/ukrytych/bez chwytów
 - **Wyszukiwarka**: tytuł > artysta > pierwszy wers > refren > tekst, snippet z podświetleniem, przycisk X do czyszczenia
@@ -42,7 +42,7 @@
 - Pomija jeśli chwyty mają 1 linijkę (1:1 z refrenem = OK)
 
 ## Ostatnie porządki (ta sesja)
-- Wersja 1.1 → 2.0
+- Wersja 2.0 → 3.0
 - Placeholdery c_PL → __PL_C__ (unikalne, bez ryzyka kolizji)
 - Get-AllSongs: $songs += → List<object> (O(n) zamiast O(n²))
 - Clean-Tex obsługuje ^ (superscript) tak jak Clean-Chord

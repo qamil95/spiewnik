@@ -51,7 +51,7 @@ Pod Windowsem ja korzystam z MiKTeX i najlepiej będzie się w tym względzie un
 Instalacja sprowadza sie do klikania "dalej" :)
 W MiKTeXie jest też dostępny podstawowy edytor LaTeXa, ale zwykły notatnik wystarczy, polecam natomiast Notepad++ jako prostą alternatywę.
 Jeżeli już mamy zainstalowanego LaTeXa, wystarczy otworzyć cmd i wpisać pdflatex (ścieżka do pliku)\Spiewnik_xxx.tex, zamiast xxx podając wybraną wersję śpiewnika. Można również uruchomić skrypt !compile_all.bat w głównym folderze śpiewnika, on automatycznie skompiluje wszystkie dostępne wersje, bądź !compile_chwyty.bat dla samej wersji z chwytami.
-Rzecz jasna najpierw trzeba ten projekt gdzieś na dysk zassać :) Najnowsza wersja jest do pobrania z zakładki Actions (https://github.com/qamil95/spiewnik/actions), należy wejść w najnowszego builda (najlepiej mastera dla stabilnej wersji) i ściągnąć archiwym Songbook v2.0, po czym wypakować je na dysk.
+Rzecz jasna najpierw trzeba ten projekt gdzieś na dysk zassać :) Najnowsza wersja jest do pobrania z zakładki Actions (https://github.com/qamil95/spiewnik/actions), należy wejść w najnowszego builda (najlepiej mastera dla stabilnej wersji) i ściągnąć archiwym Songbook v3.0, po czym wypakować je na dysk.
 
 Do współtworzenia projektu potrzebny nam będzie git, dostępny do pobrania tu: https://git-scm.com/downloads
 konto na GitHubie i zgłoszenie się do mnie z prośbą o współtworzenie.

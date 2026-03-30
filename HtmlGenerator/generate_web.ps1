@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
-# Spiewnik Web Generator v2.0
-$SCRIPT_VERSION = "2.0"
+# Spiewnik Web Generator v3.0
+$SCRIPT_VERSION = "3.0"
 # Resolve repository root: if parent contains 'main', use it (script moved to HtmlGenerator)
 $repoRoot = $PSScriptRoot
 if (-not (Test-Path (Join-Path $repoRoot 'main'))) {
@@ -1218,14 +1218,14 @@ $html = @"
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Spiewnik v2.0</title>
+<title>Spiewnik v3.0</title>
 <style>$css</style>
 </head>
 <body>
 
 <div id="header">
   <button id="menu-btn">&#9776;</button>
-  <button id="header-logo">&#127928; Spiewnik v2.0</button>
+  <button id="header-logo">&#127928; Spiewnik v3.0</button>
   <div id="search-wrap">
     <input id="search" type="text" placeholder="Szukaj piosenki, wykonawcy, tekstu...  /" autocomplete="off" spellcheck="false">
     <button id="search-clear" class="search-clear">&#x2715;</button>
@@ -1249,7 +1249,7 @@ $html = @"
     <div id="home-view">
       <div class="home-section">
         <div class="info-box">
-          <strong>Spiewnik v2.0</strong> &mdash; baza piosenek na gitare.<br>
+          <strong>Spiewnik v3.0</strong> &mdash; baza piosenek na gitare.<br>
           Wersja: <strong>$SCRIPT_VERSION</strong> &nbsp;|&nbsp; Wygenerowano: <strong>$timestamp</strong>
         </div>
       </div>

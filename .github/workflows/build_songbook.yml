@@ -36,7 +36,7 @@ jobs:
       run: dotnet build $GITHUB_WORKSPACE/SonglistGenerator/SonglistGenerator.csproj --configuration Release --no-restore
       
     - name: Run SonglistGenerator
-      run: dotnet $GITHUB_WORKSPACE/SonglistGenerator/bin/Release/net10.0/SonglistGenerator.dll $GITHUB_WORKSPACE/main "$GITHUB_WORKSPACE/Songbook v2.0 r${{github.run_number}}" 1
+      run: dotnet $GITHUB_WORKSPACE/SonglistGenerator/bin/Release/net10.0/SonglistGenerator.dll $GITHUB_WORKSPACE/main "$GITHUB_WORKSPACE/Songbook v3.0 r${{github.run_number}}" 1
     
     - name: Upload SonglistGenerator.dll
       uses: actions/upload-artifact@v6
@@ -47,41 +47,41 @@ jobs:
     - name: Upload zip file with songbook source, containing new main and master files
       uses: actions/upload-artifact@v6
       with:
-        name: Songbook v2.0 r${{github.run_number}}_source
-        path: Songbook v2.0 r${{github.run_number}}
+        name: Songbook v3.0 r${{github.run_number}}_source
+        path: Songbook v3.0 r${{github.run_number}}
       
     - name: Compile songbook A4
       uses: xu-cheng/latex-action@v2
       with:
         root_file: "Spiewnik_chwyty.tex"
-        working_directory: "Songbook v2.0 r${{github.run_number}}"
+        working_directory: "Songbook v3.0 r${{github.run_number}}"
         
     - name: Upload generated PDF A4
       uses: actions/upload-artifact@v6
       with:
-        name: Songbook v2.0 r${{github.run_number}}_pdf
-        path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty.pdf
+        name: Songbook v3.0 r${{github.run_number}}_pdf
+        path: Songbook v3.0 r${{github.run_number}}/Spiewnik_chwyty.pdf
         
     - name: Upload generated PDF A4 (output log)
       uses: actions/upload-artifact@v6
       with:
-        name: Songbook v2.0 r${{github.run_number}}_pdf_log
-        path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty.log
+        name: Songbook v3.0 r${{github.run_number}}_pdf_log
+        path: Songbook v3.0 r${{github.run_number}}/Spiewnik_chwyty.log
         
     - name: Compile songbook A5
       uses: xu-cheng/latex-action@v2
       with:
         root_file: "Spiewnik_chwyty_a5.tex"
-        working_directory: "Songbook v2.0 r${{github.run_number}}"
+        working_directory: "Songbook v3.0 r${{github.run_number}}"
 
     - name: Upload generated PDF A5
       uses: actions/upload-artifact@v6
       with:
-        name: Songbook v2.0 r${{github.run_number}}_pdf_a5
-        path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty_a5.pdf
+        name: Songbook v3.0 r${{github.run_number}}_pdf_a5
+        path: Songbook v3.0 r${{github.run_number}}/Spiewnik_chwyty_a5.pdf
         
     - name: Upload generated PDF A5 (output log)
       uses: actions/upload-artifact@v6
       with:
-        name: Songbook v2.0 r${{github.run_number}}_pdf_a5_log
-        path: Songbook v2.0 r${{github.run_number}}/Spiewnik_chwyty_a5.log
+        name: Songbook v3.0 r${{github.run_number}}_pdf_a5_log
+        path: Songbook v3.0 r${{github.run_number}}/Spiewnik_chwyty_a5.log

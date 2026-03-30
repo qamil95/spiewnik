@@ -165,6 +165,9 @@ jobs:
         name: Spiewnik v3.0 r${{github.run_number}}_html
         path: site
 
+    - name: Rename to index.html
+      run: mv site/spiewnik.html site/index.html
+
     - name: Upload Pages artifact
       uses: actions/upload-pages-artifact@v4
       with:

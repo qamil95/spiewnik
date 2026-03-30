@@ -1170,10 +1170,11 @@ async function run() {
     await page.fill('#ns-authors', 'sł. muz. Test');
     await page.fill('#ns-artist', 'Testowy Artysta');
     await page.evaluate(() => {
-      el('ns-text').value='Pierwsza linia\nDruga linia\n\nRefren linia\nRefren druga';
-      el('ns-chords').value='C G\nA D\n\nE F\nG A';
-      nsRefrainLines.clear();nsRefrainLines.add(3);nsRefrainLines.add(4);
-      nsRender();
+      nsStrophes=[
+        {text:'Pierwsza linia\nDruga linia',chords:'C G\nA D',refrain:false},
+        {text:'Refren linia\nRefren druga',chords:'E F\nG A',refrain:true}
+      ];
+      nsRenderStrophes();
     });
     const tex = await page.evaluate(() => generateTex());
     assert(tex.includes('\\tytul{Testowa}{sł. muz. Test}{Testowy Artysta}'), 'Powinien miec tytul');
@@ -1189,7 +1190,10 @@ async function run() {
   await test('Nowa piosenka - textn/chordw typ', async () => {
     await page.click('#btn-new-song');
     await page.fill('#ns-title', 'Test2');
-    await page.evaluate(() => { el('ns-text').value='Linia'; nsRender(); });
+    await page.evaluate(() => {
+      nsStrophes=[{text:'Linia',chords:'',refrain:false}];
+      nsRenderStrophes();
+    });
     await page.selectOption('#ns-type', 'textn/chordw');
     const tex = await page.evaluate(() => generateTex());
     assert(tex.includes('\\begin{textn}'), 'Powinien miec textn');
@@ -1205,13 +1209,11 @@ async function run() {
     assertEqual(title, 'Import Test', 'Tytul powinien byc wypelniony');
     const artist = await page.$eval('#ns-artist', el => el.value);
     assertEqual(artist, 'Wykonawca', 'Artysta powinien byc wypelniony');
-    const text = await page.$eval('#ns-text', el => el.value);
-    assert(text.includes('Linia jeden'), 'Tekst powinien zawierac linie');
-    assert(text.includes('Refren'), 'Tekst powinien zawierac refren');
-    const hasRefrain = await page.evaluate(() => nsRefrainLines.size > 0);
-    assert(hasRefrain, 'Refren powinien byc oznaczony w metadanych');
-    const chords = await page.$eval('#ns-chords', el => el.value);
-    assert(chords.includes('C G'), 'Chwyty powinny byc wypelnione');
+    const data = await page.evaluate(() => nsStrophes);
+    assert(data.some(s => s.text.includes('Linia jeden')), 'Tekst powinien zawierac linie');
+    assert(data.some(s => s.text.includes('Refren')), 'Tekst powinien zawierac refren');
+    assert(data.some(s => s.refrain), 'Refren powinien byc oznaczony');
+    assert(data.some(s => s.chords.includes('C G')), 'Chwyty powinny byc wypelnione');
     await page.evaluate(() => closeNewSong());
   });
 
@@ -1230,19 +1232,15 @@ async function run() {
   await test('Nowa piosenka - przycisk refren toggle', async () => {
     await page.click('#btn-new-song');
     await page.evaluate(() => {
-      nsRefrainLines.clear();
-      el('ns-text').value='Linia zwykla\nDruga linia';
-      el('ns-text').setSelectionRange(0, el('ns-text').value.length);
+      nsStrophes=[{text:'Linia zwykla\nDruga linia',chords:'C G',refrain:false}];
+      nsRenderStrophes();
     });
-    await page.click('#ns-refrain-btn');
-    const hasRef = await page.evaluate(() => nsRefrainLines.has(0) && nsRefrainLines.has(1));
-    assert(hasRef, 'Linie powinny byc oznaczone jako refren');
+    await page.click('[data-act="refrain"]');
+    const hasRef = await page.evaluate(() => nsStrophes[0].refrain);
+    assert(hasRef, 'Strofka powinna byc oznaczona jako refren');
     // toggle off
-    await page.evaluate(() => {
-      el('ns-text').setSelectionRange(0, el('ns-text').value.length);
-    });
-    await page.click('#ns-refrain-btn');
-    const noRef = await page.evaluate(() => nsRefrainLines.size === 0);
+    await page.click('[data-act="refrain"]');
+    const noRef = await page.evaluate(() => !nsStrophes[0].refrain);
     assert(noRef, 'Refren powinien byc usuniety');
     await page.evaluate(() => closeNewSong());
   });
@@ -1251,10 +1249,11 @@ async function run() {
     await page.click('#btn-new-song');
     await page.fill('#ns-title', 'Balance');
     await page.evaluate(() => {
-      el('ns-text').value='Linia\nDruga\n\nTrzecia';
-      el('ns-chords').value='C G';
-      nsRefrainLines.clear();
-      nsRender();
+      nsStrophes=[
+        {text:'Linia\nDruga',chords:'C G',refrain:false},
+        {text:'Trzecia',chords:'',refrain:false}
+      ];
+      nsRenderStrophes();
     });
     const tex = await page.evaluate(() => generateTex());
     assert(tex.includes('~'), 'Powinien wstawic ~ dla brakujacych linii');

@@ -459,31 +459,36 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 /* NEW SONG DIALOG */
 #newsong-dialog{display:none;position:fixed;inset:0;z-index:500;background:#0009;align-items:center;justify-content:center}
 #newsong-dialog.open{display:flex}
-#newsong-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;width:min(950px,95vw);height:95vh;display:flex;flex-direction:column;overflow:hidden}
-#newsong-content{padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;flex:1}
-.ns-row{display:flex;gap:8px}
-.ns-row>*{flex:1}
-.ns-field label{display:block;font-size:0.75rem;color:var(--text2);margin-bottom:2px}
-.ns-field input,.ns-field select{width:100%;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:0.85rem;font-family:inherit;outline:none;box-sizing:border-box}
-.ns-field input:focus{border-color:var(--accent)}
-.ns-editors{display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;flex:1;min-height:200px}
-.ns-editor{flex:1;display:flex;flex-direction:column}
-.ns-editor+.ns-editor{border-left:1px solid var(--border)}
-.ns-editor-header{font-size:0.72rem;color:var(--text2);padding:4px 8px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
-.ns-edit-wrap{flex:1;position:relative;overflow:hidden}
-.ns-edit-wrap textarea{position:absolute;inset:0;width:100%;height:100%;border:none;background:transparent;color:transparent;caret-color:var(--text);font-family:'Consolas','Courier New',monospace;font-size:0.82rem;line-height:1.6;padding:6px 8px;resize:none;outline:none;box-sizing:border-box;overflow-y:auto;z-index:2;white-space:pre}
-.ns-overlay{position:absolute;inset:0;font-family:'Consolas','Courier New',monospace;font-size:0.82rem;line-height:1.6;padding:6px 8px;overflow-y:auto;z-index:1;pointer-events:none;white-space:pre;color:var(--text)}
-.ns-overlay .ns-strophe{border-bottom:1px dashed var(--border);padding-bottom:2px;margin-bottom:2px}
-.ns-overlay .ns-strophe:last-child{border-bottom:none}
-.ns-overlay .ns-strophe.ns-active{border-color:var(--accent);border-bottom-style:solid}
-.ns-overlay .ns-strophe.ns-active-prev{border-bottom-color:var(--accent);border-bottom-style:solid}
-.ns-overlay .ns-line-ref{color:var(--refrain);font-weight:600}
-.ns-actions{display:flex;gap:8px;justify-content:flex-end;padding-top:6px;flex-wrap:wrap}
-.ns-hint{font-size:0.7rem;color:var(--text2);font-style:italic}
-.ns-btn-sm{background:none;border:1px solid var(--border);border-radius:4px;color:var(--text2);font-size:0.68rem;padding:1px 6px;cursor:pointer}
+#newsong-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;width:min(960px,95vw);max-height:95vh;display:flex;flex-direction:column;overflow:hidden}
+#newsong-header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;background:var(--bg3)}
+#newsong-header .ns-title-text{font-size:1rem;font-weight:600;color:var(--text)}
+#newsong-content{padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;flex:1}
+.ns-meta-row{display:flex;gap:8px;flex-wrap:wrap}
+.ns-meta-row>*{flex:1;min-width:140px}
+.ns-field label{display:block;font-size:0.7rem;color:var(--text2);margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:0.3px}
+.ns-field input,.ns-field select{width:100%;padding:7px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:0.88rem;font-family:inherit;outline:none;box-sizing:border-box;transition:border-color .15s}
+.ns-field input:focus,.ns-field select:focus{border-color:var(--accent)}
+#ns-strophes{display:flex;flex-direction:column;gap:8px}
+.ns-strophe-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--card);transition:border-color .15s}
+.ns-strophe-card.ns-refrain{border-left:3px solid var(--refrain)}
+.ns-strophe-head{display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:0.72rem;color:var(--text2)}
+.ns-strophe-num{font-weight:600}
+.ns-strophe-lines{margin-left:auto;font-size:0.68rem}
+.ns-strophe-body{display:flex}
+.ns-strophe-body>div{flex:1;display:flex;flex-direction:column}
+.ns-strophe-body>div+div{border-left:1px solid var(--border)}
+.ns-col-label{font-size:0.62rem;color:var(--text2);padding:2px 8px;background:var(--bg3);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:0.5px}
+.ns-strophe-body textarea{border:none;background:transparent;color:var(--text);font-family:'Courier New',monospace;font-size:0.82rem;line-height:1.6;padding:6px 8px;resize:none;outline:none;box-sizing:border-box;width:100%;overflow:hidden}
+.ns-strophe-body textarea.ns-chords-ta{color:var(--chord-color)}
+.ns-strophe-body textarea.ns-refrain-text{color:var(--refrain);font-style:italic}
+.ns-add-strophe{border:1px dashed var(--border);border-radius:8px;padding:10px;text-align:center;cursor:pointer;color:var(--text2);font-size:0.82rem;transition:all .15s}
+.ns-add-strophe:hover{border-color:var(--accent);color:var(--accent)}
+.ns-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;border-top:1px solid var(--border);margin-top:4px;padding-top:12px}
+.ns-btn-sm{background:none;border:1px solid var(--border);border-radius:4px;color:var(--text2);font-size:0.68rem;padding:1px 6px;cursor:pointer;transition:all .15s}
 .ns-btn-sm:hover{border-color:var(--accent);color:var(--accent)}
-.ns-line-count{font-size:0.68rem;color:var(--text2);margin-left:auto}
-.ns-line-warn{color:var(--accent)}
+.ns-btn-sm.ns-ref-active{border-color:var(--refrain);color:var(--refrain)}
+.ns-btn-sm.ns-del:hover{border-color:#e55;color:#e55}
+.ns-btn-sm.ns-italic{font-style:italic;font-family:serif;font-weight:700}
 #hidden-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;width:min(600px,95vw);max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
 #hidden-list{overflow-y:auto;padding:8px 0}
 .hidden-item{display:flex;justify-content:space-between;align-items:center;padding:6px 16px;border-bottom:1px solid var(--border);font-size:0.85rem}
@@ -1119,163 +1124,95 @@ function closeSidebar(){el('sidebar').classList.remove('open');el('sidebar-overl
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 // ── NEW SONG ───────────────────────────────────────────────────────────────
-const nsRefrainLines=new Set();
-function openNewSong(){el('newsong-dialog').classList.add('open');nsRender()}
+let nsStrophes=[{text:'',chords:'',refrain:false}];
+
+function openNewSong(){el('newsong-dialog').classList.add('open');nsRenderStrophes()}
 function closeNewSong(){el('newsong-dialog').classList.remove('open')}
 
-function nsGetCursorLine(ta){
-  return ta.value.substring(0,ta.selectionStart).split('\n').length-1;
+function nsSyncHeights(card){
+  const tas=card.querySelectorAll('textarea');
+  if(tas.length<2)return;
+  for(const t of tas)t.style.height='auto';
+  const h=Math.max(...[...tas].map(t=>t.scrollHeight));
+  for(const t of tas)t.style.height=h+'px';
 }
 
-function nsGetStropheAtLine(lines,lineIdx){
-  let strophe=0;
-  for(let i=0;i<=lineIdx;i++){
-    if(i>0&&lines[i-1]==='')strophe++;
-  }
-  return strophe;
+function nsUpdateCard(card,idx){
+  const s=nsStrophes[idx];
+  if(!s)return;
+  const tl=s.text.split('\n').filter(l=>l!=='').length;
+  const cl=s.chords.split('\n').filter(l=>l!=='').length;
+  const lc=card.querySelector('.ns-strophe-lines');
+  if(lc)lc.textContent=tl+'/'+cl;
+  nsSyncHeights(card);
 }
 
-function nsRenderOverlay(ta,overlayId,isText){
-  const ov=el(overlayId);
-  const val=ta.value;
-  const lines=val.split('\n');
-  const curLine=document.activeElement===ta?nsGetCursorLine(ta):-1;
-  const curStrophe=curLine>=0?nsGetStropheAtLine(lines,curLine):-1;
-  let html='',strophe=0,stropheStart=true;
-  for(let i=0;i<lines.length;i++){
-    if(i>0&&lines[i-1]===''){strophe++;stropheStart=true}
-    if(stropheStart){
-      if(i>0)html+='</div>';
-      const active=strophe===curStrophe?' ns-active':'';
-      const prevActive=strophe===curStrophe-1?' ns-active-prev':'';
-      html+='<div class="ns-strophe'+active+prevActive+'">';
-      stropheStart=false;
-    }
-    const isRef=isText&&nsRefrainLines.has(i);
-    const escaped=esc(lines[i])||'\n';
-    html+=(isRef?'<span class="ns-line-ref">'+escaped+'</span>':escaped)+'\n';
+function nsCreateCard(s,idx){
+  const card=document.createElement('div');
+  card.className='ns-strophe-card'+(s.refrain?' ns-refrain':'');
+  card.dataset.idx=idx;
+  const head=document.createElement('div');
+  head.className='ns-strophe-head';
+  head.innerHTML='<span class="ns-strophe-num">'+(idx+1)+(s.refrain?' (refren)':'')+'</span>'+
+    '<button class="ns-btn-sm ns-italic" data-act="italic" title="Kursywa \\textit (Ctrl+I)">I</button>'+
+    '<button class="ns-btn-sm'+(s.refrain?' ns-ref-active':'')+'" data-act="refrain" title="Oznacz jako refren">\u266c</button>'+
+    '<button class="ns-btn-sm" data-act="up" title="W g\u00f3r\u0119">\u2191</button>'+
+    '<button class="ns-btn-sm" data-act="down" title="W d\u00f3\u0142">\u2193</button>'+
+    '<button class="ns-btn-sm ns-del" data-act="del" title="Usu\u0144 strofk\u0119">\u2715</button>'+
+    '<span class="ns-strophe-lines"></span>';
+  card.appendChild(head);
+  const body=document.createElement('div');
+  body.className='ns-strophe-body';
+  function makeCol(label,val,field,cls){
+    const col=document.createElement('div');
+    col.innerHTML='<div class="ns-col-label">'+esc(label)+'</div>';
+    const ta=document.createElement('textarea');
+    ta.className=cls;ta.value=val;ta.placeholder=label+'...';
+    ta.rows=Math.max(2,(val.match(/\n/g)||[]).length+1);
+    ta.dataset.idx=idx;ta.dataset.field=field;
+    col.appendChild(ta);return col;
   }
-  html+='</div>';
-  ov.innerHTML=html;
-  ov.scrollTop=ta.scrollTop;
+  body.appendChild(makeCol('Tekst',s.text,'text','ns-strophe-text'+(s.refrain?' ns-refrain-text':'')));
+  body.appendChild(makeCol('Chwyty',s.chords,'chords','ns-chords-ta'));
+  card.appendChild(body);
+  requestAnimationFrame(()=>{nsUpdateCard(card,idx)});
+  return card;
 }
 
-function nsRender(){
-  nsRenderOverlay(el('ns-text'),'ns-text-overlay',true);
-  nsRenderOverlay(el('ns-chords'),'ns-chords-overlay',false);
-  nsUpdateCounts();
+function nsRenderStrophes(){
+  const c=el('ns-strophes');
+  const focused=document.activeElement;
+  let fi=-1,ff='',fs=[0,0];
+  if(focused&&focused.dataset&&focused.dataset.idx!==undefined){
+    fi=+focused.dataset.idx;ff=focused.dataset.field;fs=[focused.selectionStart,focused.selectionEnd];
+  }
+  c.innerHTML='';
+  nsStrophes.forEach((s,i)=>c.appendChild(nsCreateCard(s,i)));
+  if(fi>=0&&fi<nsStrophes.length){
+    const ta=c.querySelector('[data-idx="'+fi+'"][data-field="'+ff+'"]');
+    if(ta){ta.focus();ta.setSelectionRange(fs[0],fs[1])}
+  }
 }
 
-function nsToggleRefrain(){
-  const ta=el('ns-text');
-  const start=ta.selectionStart,end=ta.selectionEnd;
-  const val=ta.value;
-  const lines=val.split('\n');
-  const firstLine=val.substring(0,start).split('\n').length-1;
-  const lastLine=val.substring(0,end).split('\n').length-1;
-  // check if all selected non-empty lines are already refrain
-  let allRef=true;
-  for(let i=firstLine;i<=lastLine;i++){
-    if(lines[i]!==''&&!nsRefrainLines.has(i)){allRef=false;break}
-  }
-  for(let i=firstLine;i<=lastLine;i++){
-    if(lines[i]==='')continue;
-    if(allRef)nsRefrainLines.delete(i);else nsRefrainLines.add(i);
-  }
-  ta.focus();
-  nsRender();
+function nsAddStrophe(){
+  nsStrophes.push({text:'',chords:'',refrain:false});
+  nsRenderStrophes();
+  const cards=el('ns-strophes').children;
+  if(cards.length){const ta=cards[cards.length-1].querySelector('.ns-strophe-text');if(ta)ta.focus()}
 }
 
-function nsCountBlocks(text){
-  const lines=text.split('\n');
-  let blocks=0,inBlock=false,totalLines=0;
-  for(const l of lines){
-    if(l===''){inBlock=false}
-    else{if(!inBlock){blocks++;inBlock=true}totalLines++}
-  }
-  return {blocks,totalLines};
-}
-
-function nsUpdateCounts(){
-  const t=nsCountBlocks(el('ns-text').value);
-  const c=nsCountBlocks(el('ns-chords').value);
-  const tEl=el('ns-text-lines'),cEl=el('ns-chords-lines');
-  tEl.textContent=t.totalLines+' linii, '+t.blocks+' strof';
-  cEl.textContent=c.totalLines+' linii, '+c.blocks+' strof';
-  const mismatch=t.blocks>0&&c.blocks>0&&t.blocks!==c.blocks;
-  tEl.classList.toggle('ns-line-warn',mismatch);
-  cEl.classList.toggle('ns-line-warn',mismatch);
-}
-
-// Shift refrain indices when lines are added/removed
-function nsShiftRefrains(oldVal,newVal){
-  const oldLines=oldVal.split('\n');
-  const newLines=newVal.split('\n');
-  if(oldLines.length===newLines.length)return;
-  // find first differing line
-  let diffAt=0;
-  while(diffAt<oldLines.length&&diffAt<newLines.length&&oldLines[diffAt]===newLines[diffAt])diffAt++;
-  const delta=newLines.length-oldLines.length;
-  const updated=new Set();
-  for(const idx of nsRefrainLines){
-    if(idx<diffAt)updated.add(idx);
-    else if(idx+delta>=diffAt)updated.add(idx+delta);
-  }
-  nsRefrainLines.clear();
-  for(const idx of updated)nsRefrainLines.add(idx);
-}
-
-function textToTex(text,refrainSet){
-  const lines=text.split('\n');
-  const result=[];
-  for(let i=0;i<lines.length;i++){
-    if(lines[i]===''){result.push('');continue}
-    const isRef=refrainSet.has(i);
-    let needBreak=false;
-    for(let j=i+1;j<lines.length;j++){if(lines[j]==='')break;needBreak=true;break}
-    result.push((isRef?'    \\vin ':'    ')+lines[i]+(needBreak?'\\\\':''));
-  }
-  return result.join('\n');
-}
-
-function chordsToTex(text){
-  const lines=text.split('\n');
-  const result=[];
-  for(let i=0;i<lines.length;i++){
-    const t=lines[i].trim();
-    if(t===''){result.push('');continue}
-    let needBreak=false;
-    for(let j=i+1;j<lines.length;j++){if(lines[j].trim()==='')break;needBreak=true;break}
-    result.push('    '+t+(needBreak?'\\\\':''));
-  }
-  return result.join('\n');
-}
-
-function nsBalanceBlocks(textLines,chordLines){
-  function splitBlocks(lines){
-    const blocks=[],cur=[];
-    for(const l of lines){
-      if(l===''){if(cur.length)blocks.push([...cur]);cur.length=0}
-      else cur.push(l);
-    }
-    if(cur.length)blocks.push([...cur]);
-    return blocks;
-  }
-  const tBlocks=splitBlocks(textLines);
-  const cBlocks=splitBlocks(chordLines);
-  const max=Math.max(tBlocks.length,cBlocks.length);
-  const tOut=[],cOut=[];
-  for(let i=0;i<max;i++){
-    if(i>0){tOut.push('');cOut.push('')}
-    const tb=tBlocks[i]||[];
-    const cb=cBlocks[i]||[];
-    const lines=Math.max(tb.length,cb.length);
-    for(let j=0;j<lines;j++){
-      tOut.push(j<tb.length?tb[j]:'~');
-      cOut.push(j<cb.length?cb[j]:'~');
-    }
-  }
-  return {textLines:tOut,chordLines:cOut};
+function nsWrapItalic(ta){
+  if(!ta)return;
+  const s=ta.selectionStart,e=ta.selectionEnd,v=ta.value;
+  const sel=v.substring(s,e);
+  const wrap='\\textit{'+sel+'}';
+  ta.value=v.substring(0,s)+wrap+v.substring(e);
+  const idx=+ta.dataset.idx;
+  if(nsStrophes[idx])nsStrophes[idx][ta.dataset.field]=ta.value;
+  const cur=sel?s+wrap.length:s+8;
+  ta.focus();ta.setSelectionRange(cur,cur);
+  const card=ta.closest('.ns-strophe-card');
+  if(card)nsUpdateCard(card,idx);
 }
 
 function generateTex(){
@@ -1284,25 +1221,24 @@ function generateTex(){
   const artist=el('ns-artist').value.trim();
   const type=el('ns-type').value;
   const [textEnv,chordEnv]=type.split('/');
-  const rawText=el('ns-text').value;
-  const rawChords=el('ns-chords').value;
-  const {textLines,chordLines}=nsBalanceBlocks(rawText.split('\n'),rawChords.split('\n'));
-  // rebuild refrain set for balanced lines
-  const balancedRefrain=new Set();
-  const origLines=rawText.split('\n');
-  let origIdx=0,balIdx=0;
-  for(;balIdx<textLines.length;balIdx++){
-    if(textLines[balIdx]===''){if(origIdx<origLines.length&&origLines[origIdx]==='')origIdx++;continue}
-    if(textLines[balIdx]!=='~'&&origIdx<origLines.length){
-      if(nsRefrainLines.has(origIdx))balancedRefrain.add(balIdx);
-      origIdx++;
+  let texT='',texC='',hasChords=false;
+  nsStrophes.forEach((s,si)=>{
+    const tLines=s.text.split('\n').filter(l=>l!=='');
+    const cLines=s.chords.split('\n').filter(l=>l!=='');
+    if(cLines.length)hasChords=true;
+    const maxL=Math.max(tLines.length,cLines.length,1);
+    if(si>0){texT+='\n';texC+='\n'}
+    for(let j=0;j<maxL;j++){
+      const tl=j<tLines.length?tLines[j]:'~';
+      const cl=j<cLines.length?cLines[j]:'~';
+      const br=j<maxL-1?'\\\\':'';
+      texT+='    '+(s.refrain?'\\vin ':'')+tl+br+'\n';
+      texC+='    '+cl+br+'\n';
     }
-  }
+  });
   let tex='\\tytul{'+title+'}{'+authors+'}{'+artist+'}\n';
-  tex+='\\begin{'+textEnv+'}\n'+textToTex(textLines.join('\n'),balancedRefrain)+'\n\\end{'+textEnv+'}\n';
-  if(rawChords.trim()){
-    tex+='\\begin{'+chordEnv+'}\n'+chordsToTex(chordLines.join('\n'))+'\n\\end{'+chordEnv+'}\n';
-  }
+  tex+='\\begin{'+textEnv+'}\n'+texT+'\\end{'+textEnv+'}\n';
+  if(hasChords)tex+='\\begin{'+chordEnv+'}\n'+texC+'\\end{'+chordEnv+'}\n';
   return tex;
 }
 
@@ -1313,45 +1249,53 @@ function downloadTex(){
   const filename=title.replace(/[^a-zA-Z0-9\u00C0-\u024F ]/g,'').replace(/ +/g,'_')+'.tex';
   const blob=new Blob([tex],{type:'text/plain;charset=utf-8'});
   const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=filename;
-  a.click();
+  a.href=URL.createObjectURL(blob);a.download=filename;a.click();
   URL.revokeObjectURL(a.href);
 }
 
 function texToForm(tex){
-  nsRefrainLines.clear();
+  nsStrophes=[];
   const mTitle=/\\tytul\{([^}]*)\}\s*\{([^}]*)\}\s*\{([^}]*)\}/.exec(tex);
-  if(mTitle){
-    el('ns-title').value=mTitle[1];
-    el('ns-authors').value=mTitle[2];
-    el('ns-artist').value=mTitle[3];
-  }
+  if(mTitle){el('ns-title').value=mTitle[1];el('ns-authors').value=mTitle[2];el('ns-artist').value=mTitle[3]}
   const hasTextn=/\\begin\{textn\}/.test(tex);
   el('ns-type').value=hasTextn?'textn/chordw':'text/chord';
   const mText=/\\begin\{textn?\}([\s\S]*?)\\end\{textn?\}/.exec(tex);
+  const textSt=[];
   if(mText){
-    const rawLines=mText[1].trim().split('\n');
-    const outLines=[];
-    for(const l of rawLines){
-      let t=l.replace(/\\\\/g,'').trim();
-      if(t===''||t==='~'){outLines.push(t===''?'':'');continue}
-      const isRef=/^\\vin\s*/.test(t);
-      t=t.replace(/^\\vin\s*/,'');
-      if(isRef)nsRefrainLines.add(outLines.length);
-      outLines.push(t);
+    const blocks=mText[1].trim().split(/\n\s*\n/);
+    for(const block of blocks){
+      const lines=block.trim().split('\n');
+      let isRef=false;const clean=[];
+      for(const l of lines){
+        let t=l.replace(/\\\\/g,'').trim();
+        if(!t||t==='~')continue;
+        if(/^\\vin\s*/.test(t))isRef=true;
+        t=t.replace(/^\\vin\s*/,'');clean.push(t);
+      }
+      textSt.push({text:clean.join('\n'),refrain:isRef});
     }
-    el('ns-text').value=outLines.join('\n');
   }
   const mChord=/\\begin\{chord[w]?\}([\s\S]*?)\\end\{chord[w]?\}/.exec(tex);
+  const chordSt=[];
   if(mChord){
-    const lines=mChord[1].trim().split('\n').map(l=>{
-      const t=l.replace(/\\\\/g,'').trim();
-      return t==='~'?'':t;
-    });
-    el('ns-chords').value=lines.join('\n');
+    const blocks=mChord[1].trim().split(/\n\s*\n/);
+    for(const block of blocks){
+      const lines=block.trim().split('\n');
+      const clean=[];
+      for(const l of lines){const t=l.replace(/\\\\/g,'').trim();if(t&&t!=='~')clean.push(t)}
+      chordSt.push(clean.join('\n'));
+    }
   }
-  nsRender();
+  const max=Math.max(textSt.length,chordSt.length,1);
+  for(let i=0;i<max;i++){
+    nsStrophes.push({
+      text:i<textSt.length?textSt[i].text:'',
+      chords:i<chordSt.length?chordSt[i]:'',
+      refrain:i<textSt.length?textSt[i].refrain:false
+    });
+  }
+  if(!nsStrophes.length)nsStrophes.push({text:'',chords:'',refrain:false});
+  nsRenderStrophes();
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
@@ -1397,18 +1341,30 @@ document.addEventListener('DOMContentLoaded',()=>{
   // New song dialog
   el('btn-new-song').addEventListener('click',openNewSong);
   el('newsong-close').addEventListener('click',closeNewSong);
+  el('newsong-dialog').addEventListener('click',e=>{if(e.target===el('newsong-dialog'))closeNewSong()});
   el('ns-download').addEventListener('click',downloadTex);
-  el('ns-refrain-btn').addEventListener('click',nsToggleRefrain);
-  let nsTextPrev=el('ns-text').value;
-  el('ns-text').addEventListener('input',function(){nsShiftRefrains(nsTextPrev,this.value);nsTextPrev=this.value;nsRender()});
-  el('ns-chords').addEventListener('input',nsRender);
-  el('ns-text').addEventListener('click',nsRender);
-  el('ns-chords').addEventListener('click',nsRender);
-  el('ns-text').addEventListener('keyup',nsRender);
-  el('ns-chords').addEventListener('keyup',nsRender);
-  // sync scroll between editors and overlays
-  el('ns-text').addEventListener('scroll',function(){el('ns-chords').scrollTop=this.scrollTop;el('ns-text-overlay').scrollTop=this.scrollTop;el('ns-chords-overlay').scrollTop=this.scrollTop});
-  el('ns-chords').addEventListener('scroll',function(){el('ns-text').scrollTop=this.scrollTop;el('ns-text-overlay').scrollTop=this.scrollTop;el('ns-chords-overlay').scrollTop=this.scrollTop});
+  el('ns-add-strophe').addEventListener('click',nsAddStrophe);
+  el('ns-strophes').addEventListener('mousedown',function(e){
+    if(e.target.closest('[data-act="italic"]'))e.preventDefault();
+  });
+  el('ns-strophes').addEventListener('input',function(e){
+    const ta=e.target;if(!ta.matches('textarea'))return;
+    const idx=+ta.dataset.idx;
+    if(!nsStrophes[idx])return;
+    nsStrophes[idx][ta.dataset.field]=ta.value;
+    const card=ta.closest('.ns-strophe-card');
+    nsUpdateCard(card,idx);
+  });
+  el('ns-strophes').addEventListener('click',function(e){
+    const btn=e.target.closest('[data-act]');if(!btn)return;
+    const card=btn.closest('.ns-strophe-card');const i=+card.dataset.idx;
+    const act=btn.dataset.act;
+    if(act==='refrain'){nsStrophes[i].refrain=!nsStrophes[i].refrain;nsRenderStrophes()}
+    else if(act==='italic'){const ta=card.querySelector('textarea:focus');nsWrapItalic(ta)}
+    else if(act==='up'&&i>0){[nsStrophes[i-1],nsStrophes[i]]=[nsStrophes[i],nsStrophes[i-1]];nsRenderStrophes()}
+    else if(act==='down'&&i<nsStrophes.length-1){[nsStrophes[i],nsStrophes[i+1]]=[nsStrophes[i+1],nsStrophes[i]];nsRenderStrophes()}
+    else if(act==='del'&&nsStrophes.length>1){nsStrophes.splice(i,1);nsRenderStrophes()}
+  });
   el('ns-import-tex').addEventListener('click',()=>el('ns-import-file').click());
   el('ns-import-file').addEventListener('change',e=>{
     const f=e.target.files[0];if(!f)return;
@@ -1440,6 +1396,10 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(e.key==='Escape'){
       if(searchFocused){el('search').blur();hideSearch();return}
       closeRaw();closeHiddenDialog();closeSettings();closeNewSong();return;
+    }
+    // Ctrl+I italic in editor
+    if(e.ctrlKey&&e.key==='i'&&document.activeElement?.matches('#ns-strophes textarea')){
+      e.preventDefault();nsWrapItalic(document.activeElement);return;
     }
     // Search results navigation
     if(searchOpen&&(e.key==='ArrowDown'||e.key==='ArrowUp'||e.key==='Enter')){
@@ -1618,17 +1578,17 @@ $html = @"
 
 <div id="newsong-dialog">
   <div id="newsong-box">
-    <div id="raw-box-header">
-      <span class="raw-box-title-text">&#10133; Nowa piosenka</span>
-      <button id="newsong-close" style="background:none;border:none;color:var(--text2);font-size:1.3rem;cursor:pointer;line-height:1;padding:0 4px">&#x2715;</button>
+    <div id="newsong-header">
+      <span class="ns-title-text">&#10133; Nowa piosenka</span>
+      <button id="newsong-close" style="background:none;border:none;color:var(--text2);font-size:1.3rem;cursor:pointer;line-height:1;padding:0 4px;margin-left:auto">&#x2715;</button>
     </div>
     <div id="newsong-content">
-      <div class="ns-row">
+      <div class="ns-meta-row">
         <div class="ns-field"><label>Tytu&#x0142;</label><input id="ns-title" placeholder="np. Chyba ju&#x017C; czas"></div>
         <div class="ns-field"><label>Autorzy (s&#x0142;. muz.)</label><input id="ns-authors" placeholder="np. s&#x0142;. muz. Adam Dr&#x0105;g"></div>
         <div class="ns-field"><label>Artysta / wykonawca</label><input id="ns-artist" placeholder="np. Adam Dr&#x0105;g"></div>
       </div>
-      <div class="ns-row">
+      <div class="ns-meta-row">
         <div class="ns-field">
           <label>Typ sekcji</label>
           <select id="ns-type">
@@ -1637,31 +1597,8 @@ $html = @"
           </select>
         </div>
       </div>
-      <div class="ns-editors">
-        <div class="ns-editor">
-          <div class="ns-editor-header">
-            <span>Tekst</span>
-            <button class="ns-btn-sm" id="ns-refrain-btn" title="Zaznaczone linie jako refren">&#9836; refren</button>
-            <span class="ns-hint">pusta linia = nowa strofka</span>
-            <span class="ns-line-count" id="ns-text-lines">0</span>
-          </div>
-          <div class="ns-edit-wrap">
-            <div class="ns-overlay" id="ns-text-overlay"></div>
-            <textarea id="ns-text" placeholder="Zawinięte w kłębek drogi&#10;Liczą na twój czas&#10;&#10;Chyba już czas wracać do domu&#10;W słońcu się chyli wierzbiny liść"></textarea>
-          </div>
-        </div>
-        <div class="ns-editor">
-          <div class="ns-editor-header">
-            <span>Chwyty</span>
-            <span class="ns-hint">pusta linia = nowa strofka</span>
-            <span class="ns-line-count" id="ns-chords-lines">0</span>
-          </div>
-          <div class="ns-edit-wrap">
-            <div class="ns-overlay" id="ns-chords-overlay"></div>
-            <textarea id="ns-chords" placeholder="C&#10;C^7 G&#10;&#10;C G a G&#10;C G a G"></textarea>
-          </div>
-        </div>
-      </div>
+      <div id="ns-strophes"></div>
+      <div class="ns-add-strophe" id="ns-add-strophe">+ dodaj strofk&#x0119;</div>
       <div class="ns-actions">
         <button class="btn-mode btn-muted" id="ns-import-tex">&#128229; wczytaj .tex</button>
         <input type="file" id="ns-import-file" accept=".tex" style="display:none">

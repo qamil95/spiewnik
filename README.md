@@ -1,6 +1,44 @@
 # Hej ho :)
 Śpiewniki - są ich miliony, każdy jakiś ma: czy to na dysku, w internecie, czy w wersji papierowej, wiele różnych. Nie ma jednak żadnej spójnej wersji, a przy starcie każdego kursu przewodnickiego pojawia się dylemat "a co by tu dać kursantom do wydrukowania"? Może czas stworzyć coś bardziej uniwersalnego? Może czas na Śpiewnik v3.0?
 
+## Szybki start
+
+Najczęstsze zadania i polecenia — szybkie komendy, żeby odpalić najważniejsze rzeczy lokalnie.
+
+- Wygeneruj pojedynczy plik HTML (z katalogu `HtmlGenerator`):
+
+	```powershell
+	cd HtmlGenerator
+	.\generate_web.ps1
+	# wynik: HtmlGenerator\spiewnik.html
+	```
+
+- Zbuduj wszystkie PDFy (Windows, z katalogu głównego repozytorium):
+
+	```powershell
+	.\!compile_all.bat
+	```
+
+- Uruchom testy (w `HtmlGenerator`):
+
+	```powershell
+	cd HtmlGenerator
+	npm ci
+	node functional_test.js
+	# odświeżanie snapshotów (jeśli trzeba, na niezmodyfikowanej wersji):
+	node song_display_test.js --update
+	```
+
+## Wymagania
+
+- LaTeX (MiKTeX zalecany) — do generowania PDF.
+- .NET SDK 6.0+ — do uruchamiania `SonglistGenerator`/`SongChooser`.
+- Node.js 18+ i `npm` — do testów i narzędzi w `HtmlGenerator`.
+- PowerShell (Windows) lub zgodna powłoka — do skryptów `*.ps1` w `HtmlGenerator`.
+- `git` — do pracy z repozytorium i PR.
+
+Po pobraniu repozytorium najnowsze artefakty (PDF/HTML) są również dostępne w zakładce Actions na GitHubie.
+
 ## Trochę historii
 ### v1
 Na początku był Kraków...

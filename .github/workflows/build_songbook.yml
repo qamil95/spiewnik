@@ -143,3 +143,33 @@ jobs:
       with:
         name: Spiewnik v3.0 r${{github.run_number}}_snapshot_diffs
         path: HtmlGenerator/snapshots_diff/
+
+  deploy_pages:
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: build_html
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+    - name: Download generated HTML
+      uses: actions/download-artifact@v6
+      with:
+        name: Spiewnik v3.0 r${{github.run_number}}_html
+        path: site
+
+    - name: Upload Pages artifact
+      uses: actions/upload-pages@v4
+      with:
+        path: site
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4

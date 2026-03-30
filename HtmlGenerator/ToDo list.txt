@@ -3,32 +3,10 @@ A może lepiej jednak zrobić to na zasadzie programu C# który już mamy tutaj 
 
 ---
 
-Piosenki z błędami: 
-
-!!! Zmienić DO ŚWITU na doklejone przygrywki do reszty piosenek. W wersji PDFowej sprawdzić czy działa OK po tej zmianie, html wyglądał spoko.
-Andrzej Mróz OD TURBACZA też jest tam coś zdupcone ze sklejonymi przygrywkami.
-Piosenka dla juniora i jego gitary też ma refren skocz w pudło gitary zepsuty. (To pewnie powinno iść jako chwyty do zwrotki). No i to i pomóż słońcu też jest do poprawki.
-
-
-══ [WARN] Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu) (6x)
-    Ludowe/pedro_i_kury.tex
-      -> Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu): 'Ciężka jest droga do Rio...' [strofka 4]
-
-    Sebastian_Lenartowicz/Czerwona_flanela.tex
-      -> Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu): 'O, czerwona flanela...' [strofka 8]
-
-    Stare_Dobre_Malzenstwo/piosenka_dla_juniora_i_jego_gitary.tex
-      -> Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu): 'Skocz w pudło gitary...' [strofka 4]
-
-    Tomasz_Jarmuzewski/Jak_okiem_siegnac.tex
-      -> Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu): 'Zabieram marzeń...' [strofka 5]
-
-══ [WARN] Podejrzane: \hfill bez \break (1x)
-    na_bani/Poezja.tex
-
-Ręcznie wynotowane:
+Piosenki do poprawek: 
+Czerwona flanela - ostatni refren powinien być stransponowany, ogarnąć to i poprawić.
+Pedro i kury, też potencjalnie refren jest do zmiany.
 Pogodne popołudnie kapitana białej floty - do ogarnięcia jak to zrobić dobrze z alternatywną wersją chwytów
-Do świtu - nawet jak się poprawi wyświetlane (pierwszy punkt z poprawek w pwsh), to i tak dobrze jest "dokleić" przygrywkę do refrenu.
 Kołysanka dla Joanny I - coś tam się nie zgadza, wygląda bardzo dziwnie, to generalnej poprawki.
 
 Dodać piosenki:
@@ -44,3 +22,8 @@ Nowa funkcjonalność do dodania i pokrycia testami: przycisk następna i poprze
 Nowa funkcjonalność do dodania i pokrycia testami: Dodawane nowych piosenek - dialog w ktorym wpisujemy wszystkie potrzebne dane, tekst piosenki oraz chwyty, i potem po kliknięciu generuje sie plik tex - i zapisuje się tak samo jak eksport ustawień, też pod prawidłową nazwą. Ten plik tex jest przeznaczony i gotowy do wrzucenia do repozytorium ręcznie, i potem wygenerowania samemu nowego htmla i pdfa. Przycisk ma być w górnym menu, po lewej stronie przy przycisku SUROWY PLIK.
 
 Nowa funkcjonalność do dodania i pokrycia testami:  Ustawienie rozmiaru czcionki przyciskami plus i minus gdzieś w headerze? Teraz można jedynie zmieniać rozmiar w przeglądarce zoomując, ale fajnie by to było mieć na UI. Też z resetem do defaulta. Przyciski od tego pomiędzy surowym plikiem/dodawniame piosenki, a całą resztą z usuwaniem i ustawieniami.
+
+---
+Github Actions
+
+Dodać żeby się automatycznie budował śpiewnik w ramach github actions.

@@ -7,12 +7,12 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build_pdf:
 
     runs-on: ubuntu-latest
     
     steps:
-    - name: Chechout repository
+    - name: Checkout repository
       uses: actions/checkout@v6
     
     - name: Setup .NET Core
@@ -85,3 +85,59 @@ jobs:
       with:
         name: Songbook v3.0 r${{github.run_number}}_pdf_a5_log
         path: Songbook v3.0 r${{github.run_number}}/Spiewnik_chwyty_a5.log
+
+  build_html:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Install dependencies
+      working-directory: HtmlGenerator
+      run: npm install
+
+    - name: Install Playwright browsers
+      working-directory: HtmlGenerator
+      run: npx playwright install --with-deps chromium
+
+    - name: Generate HTML
+      working-directory: HtmlGenerator
+      run: pwsh ./generate_web.ps1 -BuildNumber "r${{github.run_number}}"
+
+    - name: Run functional tests
+      id: functional_tests
+      working-directory: HtmlGenerator
+      run: node functional_test.js
+
+    - name: Run song display tests
+      id: song_display_tests
+      working-directory: HtmlGenerator
+      run: node song_display_test.js
+
+    - name: Upload HTML
+      if: success()
+      uses: actions/upload-artifact@v6
+      with:
+        name: Spiewnik v3.0 r${{github.run_number}}_html
+        path: HtmlGenerator/spiewnik.html
+
+    - name: Upload functional test failure screenshots
+      if: failure() && steps.functional_tests.outcome == 'failure'
+      uses: actions/upload-artifact@v6
+      with:
+        name: Spiewnik v3.0 r${{github.run_number}}_functional_test_failures
+        path: HtmlGenerator/functional_fails/
+
+    - name: Upload song display test diffs
+      if: failure() && steps.song_display_tests.outcome == 'failure'
+      uses: actions/upload-artifact@v6
+      with:
+        name: Spiewnik v3.0 r${{github.run_number}}_snapshot_diffs
+        path: HtmlGenerator/snapshots_diff/

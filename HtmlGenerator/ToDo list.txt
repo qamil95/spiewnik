@@ -23,7 +23,4 @@ Nowa funkcjonalność do dodania i pokrycia testami: Dodawane nowych piosenek - 
 
 Nowa funkcjonalność do dodania i pokrycia testami:  Ustawienie rozmiaru czcionki przyciskami plus i minus gdzieś w headerze? Teraz można jedynie zmieniać rozmiar w przeglądarce zoomując, ale fajnie by to było mieć na UI. Też z resetem do defaulta. Przyciski od tego pomiędzy surowym plikiem/dodawniame piosenki, a całą resztą z usuwaniem i ustawieniami.
 
----
-Github Actions
-
-Dodać żeby się automatycznie budował śpiewnik w ramach github actions.
+Dodać żeby śpiewnik się wrzucał na github pages, w najnowszej wersji wygenerowanej z mastera.

@@ -1,4 +1,7 @@
 #!/usr/bin/env pwsh
+param(
+  [string]$BuildNumber = "local"
+)
 # Spiewnik Web Generator v3.0
 $SCRIPT_VERSION = "3.0"
 # Resolve repository root: if parent contains 'main', use it (script moved to HtmlGenerator)
@@ -1087,7 +1090,7 @@ function closeSidebar(){el('sidebar').classList.remove('open');el('sidebar-overl
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',()=>{
-  el('meta-info').textContent='v'+VERSION+' | '+SONGS.length+' piosenek | '+GENERATED;
+  el('meta-info').textContent='v'+VERSION+' (build '+BUILD_NUMBER+') | '+SONGS.length+' piosenek | '+GENERATED;
   buildToc(null);
   showHome();
 
@@ -1250,7 +1253,7 @@ $html = @"
       <div class="home-section">
         <div class="info-box">
           <strong>Spiewnik v3.0</strong> &mdash; baza piosenek na gitare.<br>
-          Wersja: <strong>$SCRIPT_VERSION</strong> &nbsp;|&nbsp; Wygenerowano: <strong>$timestamp</strong>
+          Wersja: <strong>$SCRIPT_VERSION</strong> &nbsp;|&nbsp; Build: <strong>$BuildNumber</strong> &nbsp;|&nbsp; Wygenerowano: <strong>$timestamp</strong>
         </div>
       </div>
       <div class="home-section">
@@ -1393,7 +1396,7 @@ $tmpJs = [System.IO.Path]::GetTempFileName()
 $jsSafe = [System.IO.File]::ReadAllText($tmpJs, $utf8NoBom)
 [System.IO.File]::Delete($tmpJs)
 
-$scriptContent = 'const SONGS=SONGS_JSON_HERE;' + "`nconst VERSION=`"$SCRIPT_VERSION`";`nconst GENERATED=`"$timestamp`";`n" + $jsSafe
+$scriptContent = 'const SONGS=SONGS_JSON_HERE;' + "`nconst VERSION=`"$SCRIPT_VERSION`";`nconst BUILD_NUMBER=`"$BuildNumber`";`nconst GENERATED=`"$timestamp`";`n" + $jsSafe
 $scriptContent = $scriptContent -replace 'SONGS_JSON_HERE', $songsJsonSafe
 # Podmien placeholdery polskich liter w norm() - musza byc wstawione przez PS nie przez plik tymczasowy
 $scriptContent = $scriptContent -replace '__PL_A__',  [char]0x0105  # a z ogonkiem

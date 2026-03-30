@@ -143,3 +143,78 @@ jobs:
       with:
         name: Spiewnik v3.0 r${{github.run_number}}_snapshot_diffs
         path: HtmlGenerator/snapshots_diff/
+
+  deploy_pages:
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: build_html
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+    - name: Download generated HTML
+      uses: actions/download-artifact@v6
+      with:
+        name: Spiewnik v3.0 r${{github.run_number}}_html
+        path: site
+
+    - name: Upload Pages artifact
+      uses: actions/upload-pages-artifact@v4
+      with:
+        path: site
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v5
+
+  create_release:
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: [build_pdf, build_html]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    - name: Download PDF A4
+      uses: actions/download-artifact@v6
+      with:
+        name: Songbook v3.0 r${{github.run_number}}_pdf
+        path: release
+
+    - name: Download PDF A5
+      uses: actions/download-artifact@v6
+      with:
+        name: Songbook v3.0 r${{github.run_number}}_pdf_a5
+        path: release
+
+    - name: Download HTML
+      uses: actions/download-artifact@v6
+      with:
+        name: Spiewnik v3.0 r${{github.run_number}}_html
+        path: release
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v3.0-r${{github.run_number}}
+        name: Śpiewnik v3.0 r${{github.run_number}}
+        body: |
+          Automatyczny build #${{github.run_number}}
+
+          Zawartość:
+          - **Spiewnik_chwyty.pdf** — śpiewnik A4
+          - **Spiewnik_chwyty_a5.pdf** — śpiewnik A5
+          - **spiewnik.html** — wersja webowa (offline)
+        files: |
+          release/Spiewnik_chwyty.pdf
+          release/Spiewnik_chwyty_a5.pdf
+          release/spiewnik.html

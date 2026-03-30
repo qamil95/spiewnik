@@ -1,8 +1,3 @@
-BEFORE MERGE TO MASTER
-Instalowanie playwright browsers trochę trwa. Może dałoby się to ominąć, żeby mieć jakiegoś gotowca z nimi? Może jakiś docker już ktoś zrobił, github action z zainstalowanym tym albo na przykład runs-on?
-
-
-
 Generalna rzecz:
 A może lepiej jednak zrobić to na zasadzie programu C# który już mamy tutaj otwarty i dostępny? SonglistGenerator mógłby mieć alternatywny przełącznik, który zamiast dostosować pliki .tex do bycia prawidłowo skompilowanymi przez latexa, to by utworzył ten HTML? Cała rezta funkcjonalności musi w nim być zachowana, więc to trochę roboty z przepisaniem, ale wydaje mi się że to bardziej spójne rozwiązanie. Szczególnie że jakaś forma parsowania plików już jest tam zawarta, więc powinno być nieco łatwiej się dołączyć w istniejące rozwiązanie. Przepiszesz całego powershella na ten program C#?
 
@@ -21,8 +16,6 @@ Zaczarowana gitara
 Do poprawki w obecnej wersji powrshellowej:
 
 \textit{Alternatywnie:} w środku sekcji chwytów oznacza alternatywną wersję chwytów, nie radzisz sobie z tym wcale.
-
-Nowa funkcjonalność do dodania i pokrycia testami: przycisk następna i poprzednia działa w dziwny sposób, bo np. z olka grotowskiego kolejny na liście jest Pelton, a my wpadamy w grzmiącą półlitrówę z jakiegoś powodu. Zgórmysyny mają podobny problem. Powinno to iść w tej samej kolejności co spis treści. No i poza tym, badzo ten spis skacze przy przewijaniu lub zmienianiu piosenek, trochę bardziej smooth to by mogło isć.
 
 Nowa funkcjonalność do dodania i pokrycia testami: Dodawane nowych piosenek - dialog w ktorym wpisujemy wszystkie potrzebne dane, tekst piosenki oraz chwyty, i potem po kliknięciu generuje sie plik tex - i zapisuje się tak samo jak eksport ustawień, też pod prawidłową nazwą. Ten plik tex jest przeznaczony i gotowy do wrzucenia do repozytorium ręcznie, i potem wygenerowania samemu nowego htmla i pdfa. Przycisk ma być w górnym menu, po lewej stronie przy przycisku SUROWY PLIK.
 

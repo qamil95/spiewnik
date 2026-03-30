@@ -1151,6 +1151,116 @@ async function run() {
     await page.evaluate(() => { closeSettings(); localStorage.clear(); });
   });
 
+  // ── NOWA PIOSENKA ────────────────────────────────────────────────────
+
+  console.log('\n  Nowa piosenka - dialog');
+
+  await test('Nowa piosenka - dialog otwiera sie i zamyka', async () => {
+    await page.click('#btn-new-song');
+    const open = await page.$eval('#newsong-dialog', el => el.classList.contains('open'));
+    assert(open, 'Dialog powinien byc otwarty');
+    await page.click('#newsong-close');
+    const closed = await page.$eval('#newsong-dialog', el => !el.classList.contains('open'));
+    assert(closed, 'Dialog powinien byc zamkniety');
+  });
+
+  await test('Nowa piosenka - generuje prawidlowy TEX', async () => {
+    await page.click('#btn-new-song');
+    await page.fill('#ns-title', 'Testowa');
+    await page.fill('#ns-authors', 'sł. muz. Test');
+    await page.fill('#ns-artist', 'Testowy Artysta');
+    await page.evaluate(() => {
+      el('ns-text').value='Pierwsza linia\nDruga linia\n\nRefren linia\nRefren druga';
+      el('ns-chords').value='C G\nA D\n\nE F\nG A';
+      nsRefrainLines.clear();nsRefrainLines.add(3);nsRefrainLines.add(4);
+      nsRender();
+    });
+    const tex = await page.evaluate(() => generateTex());
+    assert(tex.includes('\\tytul{Testowa}{sł. muz. Test}{Testowy Artysta}'), 'Powinien miec tytul');
+    assert(tex.includes('\\begin{text}'), 'Powinien miec begin text');
+    assert(tex.includes('\\end{text}'), 'Powinien miec end text');
+    assert(tex.includes('\\begin{chord}'), 'Powinien miec begin chord');
+    assert(tex.includes('Pierwsza linia\\\\'), 'Linia powinna miec \\\\');
+    assert(tex.includes('\\vin Refren linia'), 'Refren powinien miec \\vin');
+    assert(tex.includes('C G\\\\'), 'Chwyty powinny miec \\\\');
+    await page.evaluate(() => closeNewSong());
+  });
+
+  await test('Nowa piosenka - textn/chordw typ', async () => {
+    await page.click('#btn-new-song');
+    await page.fill('#ns-title', 'Test2');
+    await page.evaluate(() => { el('ns-text').value='Linia'; nsRender(); });
+    await page.selectOption('#ns-type', 'textn/chordw');
+    const tex = await page.evaluate(() => generateTex());
+    assert(tex.includes('\\begin{textn}'), 'Powinien miec textn');
+    assert(tex.includes('\\end{textn}'), 'Powinien miec end textn');
+    await page.evaluate(() => closeNewSong());
+  });
+
+  await test('Nowa piosenka - import TEX wypelnia formularz', async () => {
+    await page.click('#btn-new-song');
+    const tex = '\\tytul{Import Test}{sł. Autor}{Wykonawca}\n\\begin{text}\n    Linia jeden\\\\\n    \\vin Refren\n\\end{text}\n\\begin{chord}\n    C G\n\\end{chord}';
+    await page.evaluate(t => texToForm(t), tex);
+    const title = await page.$eval('#ns-title', el => el.value);
+    assertEqual(title, 'Import Test', 'Tytul powinien byc wypelniony');
+    const artist = await page.$eval('#ns-artist', el => el.value);
+    assertEqual(artist, 'Wykonawca', 'Artysta powinien byc wypelniony');
+    const text = await page.$eval('#ns-text', el => el.value);
+    assert(text.includes('Linia jeden'), 'Tekst powinien zawierac linie');
+    assert(text.includes('Refren'), 'Tekst powinien zawierac refren');
+    const hasRefrain = await page.evaluate(() => nsRefrainLines.size > 0);
+    assert(hasRefrain, 'Refren powinien byc oznaczony w metadanych');
+    const chords = await page.$eval('#ns-chords', el => el.value);
+    assert(chords.includes('C G'), 'Chwyty powinny byc wypelnione');
+    await page.evaluate(() => closeNewSong());
+  });
+
+  await test('Nowa piosenka - roundtrip TEX -> form -> TEX', async () => {
+    const original = '\\tytul{Roundtrip}{sł. muz. Test}{Artysta}\n\\begin{text}\n    Zwrotka linia\\\\\n    Zwrotka druga\n\n    \\vin Refren jeden\\\\\n    \\vin Refren dwa\n\\end{text}\n\\begin{chord}\n    C G\\\\\n    A D\n\n    E F\\\\\n    G A\n\\end{chord}\n';
+    await page.click('#btn-new-song');
+    await page.evaluate(t => texToForm(t), original);
+    const tex = await page.evaluate(() => generateTex());
+    assert(tex.includes('\\tytul{Roundtrip}'), 'Tytul zachowany');
+    assert(tex.includes('Zwrotka linia\\\\'), 'Tekst zachowany');
+    assert(tex.includes('\\vin Refren jeden\\\\'), 'Refren zachowany');
+    assert(tex.includes('C G\\\\'), 'Chwyty zachowane');
+    await page.evaluate(() => closeNewSong());
+  });
+
+  await test('Nowa piosenka - przycisk refren toggle', async () => {
+    await page.click('#btn-new-song');
+    await page.evaluate(() => {
+      nsRefrainLines.clear();
+      el('ns-text').value='Linia zwykla\nDruga linia';
+      el('ns-text').setSelectionRange(0, el('ns-text').value.length);
+    });
+    await page.click('#ns-refrain-btn');
+    const hasRef = await page.evaluate(() => nsRefrainLines.has(0) && nsRefrainLines.has(1));
+    assert(hasRef, 'Linie powinny byc oznaczone jako refren');
+    // toggle off
+    await page.evaluate(() => {
+      el('ns-text').setSelectionRange(0, el('ns-text').value.length);
+    });
+    await page.click('#ns-refrain-btn');
+    const noRef = await page.evaluate(() => nsRefrainLines.size === 0);
+    assert(noRef, 'Refren powinien byc usuniety');
+    await page.evaluate(() => closeNewSong());
+  });
+
+  await test('Nowa piosenka - auto ~ dla niezbalansowanych blokow', async () => {
+    await page.click('#btn-new-song');
+    await page.fill('#ns-title', 'Balance');
+    await page.evaluate(() => {
+      el('ns-text').value='Linia\nDruga\n\nTrzecia';
+      el('ns-chords').value='C G';
+      nsRefrainLines.clear();
+      nsRender();
+    });
+    const tex = await page.evaluate(() => generateTex());
+    assert(tex.includes('~'), 'Powinien wstawic ~ dla brakujacych linii');
+    await page.evaluate(() => closeNewSong());
+  });
+
   // ── RESPONSIVE LAYOUT ──────────────────────────────────────────────────
 
   const origSize = page.viewportSize();

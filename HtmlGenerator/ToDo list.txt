@@ -5,6 +5,8 @@ A może lepiej jednak zrobić to na zasadzie programu C# który już mamy tutaj 
 
 Piosenki z błędami: 
 
+Sprawdzić DO ŚWITU w wersji PDFowej czy działa OK, jeśli dokleimy przygrywkę do normalnej piosenki.
+
 Przede wszystkim dodać je (oraz te co już są na branchu obok scommitowane z poprawkami) do testów automatycznych.
  
 ══ [WARN] Skrocony refren z chwytami na jego wysokosci (ryzyko rozjazdu) (6x)
@@ -33,10 +35,6 @@ Kubański szlak
 Zaczarowana gitara
 ---
 Do poprawki w obecnej wersji powrshellowej:
-
-Do świtu: wersja chord only pair nie działa dobrze jeśli są same chwyty bez żadnego tekstu. Niech będzie poprawione.
-
-BUG: przy oknie tak wąskim że nie widać spisu treści, znika scrollbar.
 
 \textit{Alternatywnie:} w środku sekcji chwytów oznacza alternatywną wersję chwytów, nie radzisz sobie z tym wcale.
 

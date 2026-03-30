@@ -316,7 +316,6 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .sr-title{font-weight:600;font-size:0.88rem}
 .sr-artist{font-size:0.73rem;color:var(--accent2)}
 .sr-artist:hover{text-decoration:underline}
-.sr-hint{font-size:0.7rem;color:var(--text2);font-style:italic}
 .sr-item.sung .sr-title::after{content:" \266a";color:var(--sung);font-size:0.72rem}
 
 /* HOME */
@@ -424,6 +423,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 /* SEARCH SNIPPET */
 .sr-snippet{font-size:0.7rem;color:var(--text2);font-style:italic;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sr-snippet mark{background:none;color:var(--accent);font-style:normal;font-weight:600}
+.sr-title mark,.sr-artist mark{background:none;color:var(--accent);font-weight:700}
 
 /* RAW DIALOG */
 #raw-dialog{display:none;position:fixed;inset:0;z-index:500;background:#0009;align-items:center;justify-content:center}
@@ -494,12 +494,13 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
   .song-body.mode-inline{columns:1}
 }
 @media(max-width:780px){
+  body{overflow:auto}
   #menu-btn{display:block}
   #sidebar{position:fixed;top:0;left:0;height:100vh;z-index:95;transform:translateX(-100%)}
   #sidebar.open{transform:translateX(0)}
   #sidebar-overlay.open{display:block}
   #app{height:auto;overflow:visible}
-  #main{padding:10px}
+  #main{padding:10px;overflow-y:visible}
   .sv-title{font-size:1.15rem}
   .song-body{padding:10px 12px}
   .side-list{grid-template-columns:repeat(2,1fr)}
@@ -562,29 +563,29 @@ function search(q){
   if(!q.trim())return[];
   const nq=norm(q), res=[];
   for(const s of SONGS){
-    let score=0,hint='',snippet=null;
+    let score=0,matchIn='',snippet=null;
     const nt=norm(s.title),na=norm(s.artist);
-    if(nt===nq){score=100;hint='tytu\u0142';snippet=getSnippet(s.title,nq);}
-    else if(nt.startsWith(nq)){score=90;hint='tytu\u0142';snippet=getSnippet(s.title,nq);}
-    else if(nt.includes(nq)){score=80;hint='tytu\u0142';snippet=getSnippet(s.title,nq);}
-    else if(na===nq){score=70;hint='wykonawca';snippet=getSnippet(s.artist,nq);}
-    else if(na.includes(nq)){score=60;hint='wykonawca';snippet=getSnippet(s.artist,nq);}
+    if(nt===nq){score=100;matchIn='title';}
+    else if(nt.startsWith(nq)){score=90;matchIn='title';}
+    else if(nt.includes(nq)){score=80;matchIn='title';}
+    else if(na===nq){score=70;matchIn='artist';}
+    else if(na.includes(nq)){score=60;matchIn='artist';}
     else{
       const fv=norm(s.firstVerse);
-      if(fv&&fv.includes(nq)){score=50;hint='pierwszy wers';snippet=getSnippet(s.firstVerse,nq);}
+      if(fv&&fv.includes(nq)){score=50;snippet=getSnippet(s.firstVerse,nq);}
       else{
         const fr=norm(s.firstRefrain);
-        if(fr&&fr.includes(nq)){score=40;hint='refren';snippet=getSnippet(s.firstRefrain,nq);}
+        if(fr&&fr.includes(nq)){score=40;snippet=getSnippet(s.firstRefrain,nq);}
         else{
           for(const p of s.pairs){
             if(!p.t)continue;
             const np=norm(p.t);
-            if(np.includes(nq)){score=20;hint='tekst';snippet=getSnippet(p.t,nq);break;}
+            if(np.includes(nq)){score=20;snippet=getSnippet(p.t,nq);break;}
           }
         }
       }
     }
-    if(score>0)res.push({s,score,hint,snippet});
+    if(score>0)res.push({s,score,matchIn,snippet});
   }
   return res.sort((a,b)=>{const ha=isHidden(a.s.id)?1:0,hb=isHidden(b.s.id)?1:0;return ha-hb||b.score-a.score});
 }
@@ -991,24 +992,31 @@ function updateHideBtn(){
 }
 
 // ── SEARCH UI ──────────────────────────────────────────────────────────────
+function hlText(text,nq){
+  const nt=norm(text),i=nt.indexOf(nq);
+  if(i<0)return esc(text);
+  return esc(text.substring(0,i))+'<mark>'+esc(text.substring(i,i+nq.length))+'</mark>'+esc(text.substring(i+nq.length));
+}
 function doSearch(q){
   const res=el('search-results');
   if(!q.trim()){res.classList.remove('open');return}
   const results=search(q);
   const today=getTodaySet();
+  const nq=norm(q);
   res.innerHTML='';
   if(!results.length){
-    res.innerHTML='<div class="sr-item"><span class="sr-hint">Brak wynik\u00f3w</span></div>';
+    res.innerHTML='<div class="sr-item"><span class="sr-snippet">Brak wynik\u00f3w</span></div>';
   } else {
-    for(const {s,hint,snippet} of results.slice(0,30)){
+    for(const {s,matchIn,snippet} of results.slice(0,30)){
       const d=document.createElement('div');
       d.className='sr-item'+(today.has(s.id)?' sung':'')+(isHidden(s.id)?' hidden-song':'');
-      const t=document.createElement('div');t.className='sr-title';t.textContent=s.title;
+      const t=document.createElement('div');t.className='sr-title';
+      if(matchIn==='title'){t.innerHTML=hlText(s.title,nq)}else{t.textContent=s.title}
       t.onclick=()=>{hideSearch();showSong(s.id)};
-      const a=document.createElement('div');a.className='sr-artist';a.textContent=s.artist;
+      const a=document.createElement('div');a.className='sr-artist';
+      if(matchIn==='artist'){a.innerHTML=hlText(s.artist,nq)}else{a.textContent=s.artist}
       a.onclick=(e)=>{e.stopPropagation();hideSearch();showArtist(s.artistFolder)};
-      const h=document.createElement('div');h.className='sr-hint';h.textContent=hint;
-      d.appendChild(t);d.appendChild(a);d.appendChild(h);
+      d.appendChild(t);d.appendChild(a);
       if(snippet){
         const sn=document.createElement('div');sn.className='sr-snippet';
         sn.innerHTML=esc(snippet.pre)+'<mark>'+esc(snippet.match)+'</mark>'+esc(snippet.post);

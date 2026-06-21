@@ -15,10 +15,10 @@ Zaczarowana gitara
 ---
 Do poprawki w obecnej wersji powrshellowej:
 
+Ciąg dalszy edytora piosenek, przetestować go trzeba i poprawić, wygląda na bardzo krzywy i ogólnie dość brzydki, strofy się nie matchują
+
+Surowy plik oznacza wszystko jako refren jeśli nie ma przewy miedzy zwrotka a refrenem (beskyde beskyde)
+
 \textit{Alternatywnie:} w środku sekcji chwytów oznacza alternatywną wersję chwytów, nie radzisz sobie z tym wcale.
 
-Nowa funkcjonalność do dodania i pokrycia testami: Dodawane nowych piosenek - dialog w ktorym wpisujemy wszystkie potrzebne dane, tekst piosenki oraz chwyty, i potem po kliknięciu generuje sie plik tex - i zapisuje się tak samo jak eksport ustawień, też pod prawidłową nazwą. Ten plik tex jest przeznaczony i gotowy do wrzucenia do repozytorium ręcznie, i potem wygenerowania samemu nowego htmla i pdfa. Przycisk ma być w górnym menu, po lewej stronie przy przycisku SUROWY PLIK.
-
 Nowa funkcjonalność do dodania i pokrycia testami:  Ustawienie rozmiaru czcionki przyciskami plus i minus gdzieś w headerze? Teraz można jedynie zmieniać rozmiar w przeglądarce zoomując, ale fajnie by to było mieć na UI. Też z resetem do defaulta. Przyciski od tego pomiędzy surowym plikiem/dodawniame piosenki, a całą resztą z usuwaniem i ustawieniami.
-
-Dodać żeby śpiewnik się wrzucał na github pages, w najnowszej wersji wygenerowanej z mastera.

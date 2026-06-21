@@ -455,6 +455,40 @@ body{background:var(--bg);color:var(--text);font-family:Inter,Roboto,system-ui,s
 .sr-item.sr-active{background:var(--card2);outline:1px solid var(--accent)}
 .shortcuts-list{font-size:0.82rem;color:var(--text2);line-height:2}
 .shortcuts-list kbd{background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:monospace;font-size:0.78rem;color:var(--text)}
+
+/* NEW SONG DIALOG */
+#newsong-dialog{display:none;position:fixed;inset:0;z-index:500;background:#0009;align-items:center;justify-content:center}
+#newsong-dialog.open{display:flex}
+#newsong-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;width:min(960px,95vw);max-height:95vh;display:flex;flex-direction:column;overflow:hidden}
+#newsong-header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;background:var(--bg3)}
+#newsong-header .ns-title-text{font-size:1rem;font-weight:600;color:var(--text)}
+#newsong-content{padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;flex:1}
+.ns-meta-row{display:flex;gap:8px;flex-wrap:wrap}
+.ns-meta-row>*{flex:1;min-width:140px}
+.ns-field label{display:block;font-size:0.7rem;color:var(--text2);margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:0.3px}
+.ns-field input,.ns-field select{width:100%;padding:7px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:0.88rem;font-family:inherit;outline:none;box-sizing:border-box;transition:border-color .15s}
+.ns-field input:focus,.ns-field select:focus{border-color:var(--accent)}
+#ns-strophes{display:flex;flex-direction:column;gap:8px}
+.ns-strophe-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--card);transition:border-color .15s}
+.ns-strophe-card.ns-refrain{border-left:3px solid var(--refrain)}
+.ns-strophe-head{display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:0.72rem;color:var(--text2)}
+.ns-strophe-num{font-weight:600}
+.ns-strophe-lines{margin-left:auto;font-size:0.68rem}
+.ns-strophe-body{display:flex}
+.ns-strophe-body>div{flex:1;display:flex;flex-direction:column}
+.ns-strophe-body>div+div{border-left:1px solid var(--border)}
+.ns-col-label{font-size:0.62rem;color:var(--text2);padding:2px 8px;background:var(--bg3);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:0.5px}
+.ns-strophe-body textarea{border:none;background:transparent;color:var(--text);font-family:'Courier New',monospace;font-size:0.82rem;line-height:1.6;padding:6px 8px;resize:none;outline:none;box-sizing:border-box;width:100%;overflow:hidden}
+.ns-strophe-body textarea.ns-chords-ta{color:var(--chord-color)}
+.ns-strophe-body textarea.ns-refrain-text{color:var(--refrain);font-style:italic}
+.ns-add-strophe{border:1px dashed var(--border);border-radius:8px;padding:10px;text-align:center;cursor:pointer;color:var(--text2);font-size:0.82rem;transition:all .15s}
+.ns-add-strophe:hover{border-color:var(--accent);color:var(--accent)}
+.ns-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;border-top:1px solid var(--border);margin-top:4px;padding-top:12px}
+.ns-btn-sm{background:none;border:1px solid var(--border);border-radius:4px;color:var(--text2);font-size:0.68rem;padding:1px 6px;cursor:pointer;transition:all .15s}
+.ns-btn-sm:hover{border-color:var(--accent);color:var(--accent)}
+.ns-btn-sm.ns-ref-active{border-color:var(--refrain);color:var(--refrain)}
+.ns-btn-sm.ns-del:hover{border-color:#e55;color:#e55}
+.ns-btn-sm.ns-italic{font-style:italic;font-family:serif;font-weight:700}
 #hidden-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;width:min(600px,95vw);max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
 #hidden-list{overflow-y:auto;padding:8px 0}
 .hidden-item{display:flex;justify-content:space-between;align-items:center;padding:6px 16px;border-bottom:1px solid var(--border);font-size:0.85rem}
@@ -1089,6 +1123,184 @@ function openSidebar(){el('sidebar').classList.add('open');el('sidebar-overlay')
 function closeSidebar(){el('sidebar').classList.remove('open');el('sidebar-overlay').classList.remove('open')}
 
 // ── INIT ───────────────────────────────────────────────────────────────────
+// ── NEW SONG ───────────────────────────────────────────────────────────────
+let nsStrophes=[{text:'',chords:'',refrain:false}];
+
+function openNewSong(){el('newsong-dialog').classList.add('open');nsRenderStrophes()}
+function closeNewSong(){el('newsong-dialog').classList.remove('open')}
+
+function nsSyncHeights(card){
+  const tas=card.querySelectorAll('textarea');
+  if(tas.length<2)return;
+  for(const t of tas)t.style.height='auto';
+  const h=Math.max(...[...tas].map(t=>t.scrollHeight));
+  for(const t of tas)t.style.height=h+'px';
+}
+
+function nsUpdateCard(card,idx){
+  const s=nsStrophes[idx];
+  if(!s)return;
+  const tl=s.text?s.text.split('\n').length:0;
+  const cl=s.chords?s.chords.split('\n').length:0;
+  const lc=card.querySelector('.ns-strophe-lines');
+  if(lc)lc.textContent=tl+'/'+cl;
+  nsSyncHeights(card);
+}
+
+function nsCreateCard(s,idx){
+  const card=document.createElement('div');
+  card.className='ns-strophe-card'+(s.refrain?' ns-refrain':'');
+  card.dataset.idx=idx;
+  const head=document.createElement('div');
+  head.className='ns-strophe-head';
+  head.innerHTML='<span class="ns-strophe-num">'+(idx+1)+(s.refrain?' (refren)':'')+'</span>'+
+    '<button class="ns-btn-sm ns-italic" data-act="italic" title="Kursywa \\textit (Ctrl+I)">I</button>'+
+    '<button class="ns-btn-sm'+(s.refrain?' ns-ref-active':'')+'" data-act="refrain" title="Oznacz jako refren">\u266c</button>'+
+    '<button class="ns-btn-sm" data-act="up" title="W g\u00f3r\u0119">\u2191</button>'+
+    '<button class="ns-btn-sm" data-act="down" title="W d\u00f3\u0142">\u2193</button>'+
+    '<button class="ns-btn-sm ns-del" data-act="del" title="Usu\u0144 strofk\u0119">\u2715</button>'+
+    '<span class="ns-strophe-lines"></span>';
+  card.appendChild(head);
+  const body=document.createElement('div');
+  body.className='ns-strophe-body';
+  function makeCol(label,val,field,cls){
+    const col=document.createElement('div');
+    col.innerHTML='<div class="ns-col-label">'+esc(label)+'</div>';
+    const ta=document.createElement('textarea');
+    ta.className=cls;ta.value=val;ta.placeholder=label+'...';
+    ta.rows=Math.max(2,(val.match(/\n/g)||[]).length+1);
+    ta.dataset.idx=idx;ta.dataset.field=field;
+    col.appendChild(ta);return col;
+  }
+  body.appendChild(makeCol('Tekst',s.text,'text','ns-strophe-text'+(s.refrain?' ns-refrain-text':'')));
+  body.appendChild(makeCol('Chwyty',s.chords,'chords','ns-chords-ta'));
+  card.appendChild(body);
+  requestAnimationFrame(()=>{nsUpdateCard(card,idx)});
+  return card;
+}
+
+function nsRenderStrophes(){
+  const c=el('ns-strophes');
+  const focused=document.activeElement;
+  let fi=-1,ff='',fs=[0,0];
+  if(focused&&focused.dataset&&focused.dataset.idx!==undefined){
+    fi=+focused.dataset.idx;ff=focused.dataset.field;fs=[focused.selectionStart,focused.selectionEnd];
+  }
+  c.innerHTML='';
+  nsStrophes.forEach((s,i)=>c.appendChild(nsCreateCard(s,i)));
+  if(fi>=0&&fi<nsStrophes.length){
+    const ta=c.querySelector('[data-idx="'+fi+'"][data-field="'+ff+'"]');
+    if(ta){ta.focus();ta.setSelectionRange(fs[0],fs[1])}
+  }
+}
+
+function nsAddStrophe(){
+  nsStrophes.push({text:'',chords:'',refrain:false});
+  nsRenderStrophes();
+  const cards=el('ns-strophes').children;
+  if(cards.length){const ta=cards[cards.length-1].querySelector('.ns-strophe-text');if(ta)ta.focus()}
+}
+
+function nsWrapItalic(ta){
+  if(!ta)return;
+  const s=ta.selectionStart,e=ta.selectionEnd,v=ta.value;
+  const sel=v.substring(s,e);
+  const wrap='\\textit{'+sel+'}';
+  ta.value=v.substring(0,s)+wrap+v.substring(e);
+  const idx=+ta.dataset.idx;
+  if(nsStrophes[idx])nsStrophes[idx][ta.dataset.field]=ta.value;
+  const cur=sel?s+wrap.length:s+8;
+  ta.focus();ta.setSelectionRange(cur,cur);
+  const card=ta.closest('.ns-strophe-card');
+  if(card)nsUpdateCard(card,idx);
+}
+
+function generateTex(){
+  const title=el('ns-title').value.trim();
+  const authors=el('ns-authors').value.trim();
+  const artist=el('ns-artist').value.trim();
+  const type=el('ns-type').value;
+  const [textEnv,chordEnv]=type.split('/');
+  let texT='',texC='',hasChords=false;
+  nsStrophes.forEach((s,si)=>{
+    const tLines=s.text?s.text.split('\n'):[];
+    const cLines=s.chords?s.chords.split('\n'):[];
+    while(tLines.length&&tLines[tLines.length-1]==='')tLines.pop();
+    while(cLines.length&&cLines[cLines.length-1]==='')cLines.pop();
+    if(cLines.length)hasChords=true;
+    const maxL=Math.max(tLines.length,cLines.length,1);
+    if(si>0){texT+='\n';texC+='\n'}
+    for(let j=0;j<maxL;j++){
+      const tl=j<tLines.length?(tLines[j]||'~'):'~';
+      const cl=j<cLines.length?(cLines[j]||'~'):'~';
+      const br=j<maxL-1?'\\\\':'';
+      texT+='    '+(s.refrain?'\\vin ':'')+tl+br+'\n';
+      texC+='    '+cl+br+'\n';
+    }
+  });
+  let tex='\\tytul{'+title+'}{'+authors+'}{'+artist+'}\n';
+  tex+='\\begin{'+textEnv+'}\n'+texT+'\\end{'+textEnv+'}\n';
+  if(hasChords)tex+='\\begin{'+chordEnv+'}\n'+texC+'\\end{'+chordEnv+'}\n';
+  return tex;
+}
+
+function downloadTex(){
+  const title=el('ns-title').value.trim();
+  if(!title){alert('Wpisz tytu\u0142!');return}
+  const tex=generateTex();
+  const filename=title.replace(/[^a-zA-Z0-9\u00C0-\u024F ]/g,'').replace(/ +/g,'_')+'.tex';
+  const blob=new Blob([tex],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=filename;a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function texToForm(tex){
+  nsStrophes=[];
+  const mTitle=/\\tytul\{([^}]*)\}\s*\{([^}]*)\}\s*\{([^}]*)\}/.exec(tex);
+  if(mTitle){el('ns-title').value=mTitle[1];el('ns-authors').value=mTitle[2];el('ns-artist').value=mTitle[3]}
+  const hasTextn=/\\begin\{textn\}/.test(tex);
+  el('ns-type').value=hasTextn?'textn/chordw':'text/chord';
+  const mText=/\\begin\{textn?\}([\s\S]*?)\\end\{textn?\}/.exec(tex);
+  const textSt=[];
+  if(mText){
+    const blocks=mText[1].trim().split(/\n\s*\n/);
+    for(const block of blocks){
+      const lines=block.trim().split('\n');
+      let isRef=false;const clean=[];
+      for(const l of lines){
+        let t=l.replace(/\\\\/g,'').trim();
+        if(!t)continue;
+        if(/^\\vin\s*/.test(t))isRef=true;
+        t=t.replace(/^\\vin\s*/,'');
+        clean.push(t==='~'?'':t);
+      }
+      textSt.push({text:clean.join('\n'),refrain:isRef});
+    }
+  }
+  const mChord=/\\begin\{chord[w]?\}([\s\S]*?)\\end\{chord[w]?\}/.exec(tex);
+  const chordSt=[];
+  if(mChord){
+    const blocks=mChord[1].trim().split(/\n\s*\n/);
+    for(const block of blocks){
+      const lines=block.trim().split('\n');
+      const clean=[];
+      for(const l of lines){const t=l.replace(/\\\\/g,'').trim();if(t)clean.push(t==='~'?'':t)}
+      chordSt.push(clean.join('\n'));
+    }
+  }
+  const max=Math.max(textSt.length,chordSt.length,1);
+  for(let i=0;i<max;i++){
+    nsStrophes.push({
+      text:i<textSt.length?textSt[i].text:'',
+      chords:i<chordSt.length?chordSt[i]:'',
+      refrain:i<textSt.length?textSt[i].refrain:false
+    });
+  }
+  if(!nsStrophes.length)nsStrophes.push({text:'',chords:'',refrain:false});
+  nsRenderStrophes();
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
   el('meta-info').textContent='v'+VERSION+' (build '+BUILD_NUMBER+') | '+SONGS.length+' piosenek | '+GENERATED;
   buildToc(null);
@@ -1128,6 +1340,41 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   el('btn-settings').addEventListener('click',showSettings);
   el('settings-close').addEventListener('click',closeSettings);
+
+  // New song dialog
+  el('btn-new-song').addEventListener('click',openNewSong);
+  el('newsong-close').addEventListener('click',closeNewSong);
+  el('newsong-dialog').addEventListener('click',e=>{if(e.target===el('newsong-dialog'))closeNewSong()});
+  el('ns-download').addEventListener('click',downloadTex);
+  el('ns-add-strophe').addEventListener('click',nsAddStrophe);
+  el('ns-strophes').addEventListener('mousedown',function(e){
+    if(e.target.closest('[data-act="italic"]'))e.preventDefault();
+  });
+  el('ns-strophes').addEventListener('input',function(e){
+    const ta=e.target;if(!ta.matches('textarea'))return;
+    const idx=+ta.dataset.idx;
+    if(!nsStrophes[idx])return;
+    nsStrophes[idx][ta.dataset.field]=ta.value;
+    const card=ta.closest('.ns-strophe-card');
+    nsUpdateCard(card,idx);
+  });
+  el('ns-strophes').addEventListener('click',function(e){
+    const btn=e.target.closest('[data-act]');if(!btn)return;
+    const card=btn.closest('.ns-strophe-card');const i=+card.dataset.idx;
+    const act=btn.dataset.act;
+    if(act==='refrain'){nsStrophes[i].refrain=!nsStrophes[i].refrain;nsRenderStrophes()}
+    else if(act==='italic'){const ta=card.querySelector('textarea:focus');nsWrapItalic(ta)}
+    else if(act==='up'&&i>0){[nsStrophes[i-1],nsStrophes[i]]=[nsStrophes[i],nsStrophes[i-1]];nsRenderStrophes()}
+    else if(act==='down'&&i<nsStrophes.length-1){[nsStrophes[i],nsStrophes[i+1]]=[nsStrophes[i+1],nsStrophes[i]];nsRenderStrophes()}
+    else if(act==='del'&&nsStrophes.length>1){nsStrophes.splice(i,1);nsRenderStrophes()}
+  });
+  el('ns-import-tex').addEventListener('click',()=>el('ns-import-file').click());
+  el('ns-import-file').addEventListener('change',e=>{
+    const f=e.target.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{texToForm(r.result)};
+    r.readAsText(f);e.target.value='';
+  });
   el('settings-dialog').addEventListener('click',e=>{if(e.target===el('settings-dialog'))closeSettings();});
   el('set-mode-above').addEventListener('click',()=>{setChordMode('above');el('set-mode-above').classList.add('active');el('set-mode-inline').classList.remove('active')});
   el('set-mode-inline').addEventListener('click',()=>{setChordMode('inline');el('set-mode-inline').classList.add('active');el('set-mode-above').classList.remove('active')});
@@ -1151,7 +1398,11 @@ document.addEventListener('DOMContentLoaded',()=>{
     // Escape always works
     if(e.key==='Escape'){
       if(searchFocused){el('search').blur();hideSearch();return}
-      closeRaw();closeHiddenDialog();closeSettings();return;
+      closeRaw();closeHiddenDialog();closeSettings();closeNewSong();return;
+    }
+    // Ctrl+I italic in editor
+    if(e.ctrlKey&&e.key==='i'&&document.activeElement?.matches('#ns-strophes textarea')){
+      e.preventDefault();nsWrapItalic(document.activeElement);return;
     }
     // Search results navigation
     if(searchOpen&&(e.key==='ArrowDown'||e.key==='ArrowUp'||e.key==='Enter')){
@@ -1237,6 +1488,7 @@ $html = @"
   <div id="header-meta"><span id="meta-info"></span></div>
   <button class="btn-mode" id="sv-raw-btn" style="display:none">&#128196; surowy plik</button>
   <span class="header-right">
+    <button class="btn-mode btn-muted" id="btn-new-song">&#10133; nowa piosenka</button>
     <button class="btn-mode btn-danger" id="sv-hide-btn" style="display:none">&#10005; usu&#x0144;</button>
     <button class="btn-mode btn-muted" id="btn-hidden-list">&#128465; usuni&#x0119;te</button>
     <button class="btn-mode btn-muted" id="btn-settings">&#9881; ustawienia</button>
@@ -1324,6 +1576,38 @@ $html = @"
       <button id="hidden-close" style="background:none;border:none;color:var(--text2);font-size:1.3rem;cursor:pointer;line-height:1;padding:0 4px">&#x2715;</button>
     </div>
     <div id="hidden-list"></div>
+  </div>
+</div>
+
+<div id="newsong-dialog">
+  <div id="newsong-box">
+    <div id="newsong-header">
+      <span class="ns-title-text">&#10133; Nowa piosenka</span>
+      <button id="newsong-close" style="background:none;border:none;color:var(--text2);font-size:1.3rem;cursor:pointer;line-height:1;padding:0 4px;margin-left:auto">&#x2715;</button>
+    </div>
+    <div id="newsong-content">
+      <div class="ns-meta-row">
+        <div class="ns-field"><label>Tytu&#x0142;</label><input id="ns-title" placeholder="np. Chyba ju&#x017C; czas"></div>
+        <div class="ns-field"><label>Autorzy (s&#x0142;. muz.)</label><input id="ns-authors" placeholder="np. s&#x0142;. muz. Adam Dr&#x0105;g"></div>
+        <div class="ns-field"><label>Artysta / wykonawca</label><input id="ns-artist" placeholder="np. Adam Dr&#x0105;g"></div>
+      </div>
+      <div class="ns-meta-row">
+        <div class="ns-field">
+          <label>Typ sekcji</label>
+          <select id="ns-type">
+            <option value="text/chord">text + chord (standard)</option>
+            <option value="textn/chordw">textn + chordw (w&#x0105;ski tekst, szerokie chwyty)</option>
+          </select>
+        </div>
+      </div>
+      <div id="ns-strophes"></div>
+      <div class="ns-add-strophe" id="ns-add-strophe">+ dodaj strofk&#x0119;</div>
+      <div class="ns-actions">
+        <button class="btn-mode btn-muted" id="ns-import-tex">&#128229; wczytaj .tex</button>
+        <input type="file" id="ns-import-file" accept=".tex" style="display:none">
+        <button class="btn-mode" id="ns-download">&#128230; pobierz .tex</button>
+      </div>
+    </div>
   </div>
 </div>
 
